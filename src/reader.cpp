@@ -24,7 +24,7 @@ void Reader::DefineReply(data_ptr&& reply) const {
             break;
 
         default:
-            throw std::logic_error("Unknown reply");  // TODO may be change
+            throw std::invalid_argument("Unknown reply");
     }
     if (print_replies) {
         cout << print_message_ << '\n';
@@ -35,7 +35,7 @@ void Reader::DefineReply(data_ptr&& reply) const {
 }
 
 void Reader::ReadState(data_ptr&& reply) const {
-
+    uint16_t code = *(uint16_t*)reply->data();
 }
 
 void Reader::GoToPoint(data_ptr&& reply) const {

@@ -5,8 +5,8 @@
 #pragma pack(push, 1)
 
 struct Command {  // read data, start/stop sequence
-    uint16_t command;
-    uint16_t n_packet;
+    uint16_t command{};
+    uint16_t n_packet{};
 };
 
 struct MoveToPoint {

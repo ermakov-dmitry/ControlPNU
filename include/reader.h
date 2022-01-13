@@ -24,7 +24,7 @@ private:
     bool log_replies;
     Logger logger_;
     std::string print_message_;
-    std::shared_ptr<Command> log_command_;  // TODO
+    // std::shared_ptr<Command> log_command_;  // TODO create answer commands
 };
 
 #endif //DIPLOMA_READER_H
