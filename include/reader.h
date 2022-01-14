@@ -8,21 +8,23 @@
 #include <string>
 #include "logger.h"
 #include "commands.h"
+#include "transformer.h"
 
 class Reader{
     using data_ptr = std::unique_ptr<const std::vector<std::byte>>;
 public:
     explicit Reader(bool is_print, bool is_log);
-    void DefineReply(data_ptr&&) const;
+    void UnpackReply(data_ptr&&);
 
 private:
-    void ReadState(data_ptr&&) const;
-    void GoToPoint(data_ptr&&) const;
-    void MaxAccAndSpeed(data_ptr&&) const;
-    void Reset(data_ptr&&) const;
+    void ReadState(data_ptr&&);
+    void GoToPoint(data_ptr&&);
+    void MaxAccAndSpeed(data_ptr&&);
+    void Reset(data_ptr&&);
     bool print_replies;
     bool log_replies;
     Logger logger_;
+    Transformer transformer_;
     std::string print_message_;
     // std::shared_ptr<Command> log_command_;  // TODO create answer commands
 };

@@ -14,14 +14,14 @@ class PNUCreator;
 class PNU {
 public:
     friend PNUCreator;
-    void GetState() const;
-    void GoToPoint(long double azimuth, long double elevator) const;
+    void GetState();
+    void GoToPoint(long double azimuth, long double elevator);
     void SetMaxAccelerationAndSpeed(long double max_acc_azimuth, long double max_acc_elevator,
-                                    long double max_spd_azimuth, long double max_spd_elevator) const;
-    void Reset() const;
+                                    long double max_spd_azimuth, long double max_spd_elevator);
+    void Reset();
 private:
     explicit PNU(std::string_view ip_address, int port, bool is_print, bool is_log);  // may be other for new objects
-    void CheckReply(std::unique_ptr<const std::vector<std::byte>>&&) const;
+    void CheckReply(std::unique_ptr<const std::vector<std::byte>>&&);
     Transformer transformer_;
     mutable UDPConnecter connecter_;
     Reader reader_;

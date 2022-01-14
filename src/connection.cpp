@@ -1,6 +1,7 @@
 #include "connection.h"
 
 using namespace boost::asio;
+using namespace std;
 
 UDPConnecter::UDPConnecter(std::string_view ip_address, int port)
     : resolver_(io_context_), sock_(io_context_), packet_number_(1u) {
@@ -13,20 +14,21 @@ UDPConnecter::~UDPConnecter() {
     sock_.close();
 }
 
-void UDPConnecter::SendMessage(void* data, size_t len) {
-    sock_.send_to(buffer(data, len), ep_);
+void UDPConnecter::SendMessage(const std::vector<std::byte>& data) {
+    sock_.send_to(buffer(data), ep_);
     packet_number_++;
 }
 
 std::unique_ptr<const std::vector<std::byte>> UDPConnecter::ReadMessage() {
     ip::udp::endpoint client;
-    std::vector<std::byte> data;
-    data.reserve(1024);
+    std::vector<std::byte> data(1024);
     bool wait_first_message = true;
+    unsigned long len = 0;
     while (sock_.available() > 0 || wait_first_message) {
         wait_first_message = false;
-        sock_.receive_from(buffer(data), client);
+        len = sock_.receive_from(buffer(data), client);
     }
+    data.resize(len);
     data.shrink_to_fit();
     return std::make_unique<const std::vector<std::byte>>(data);
 }

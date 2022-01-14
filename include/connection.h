@@ -11,7 +11,7 @@
 class UDPConnecter {
 public:
     explicit UDPConnecter(std::string_view ip_address, int port);
-    void SendMessage(void* data, size_t len);
+    void SendMessage(const std::vector<std::byte>&);
     std::unique_ptr<const std::vector<std::byte>> ReadMessage();
     [[nodiscard]] uint16_t GetPacketNumber() const;
     void ResetPackageNumber();
