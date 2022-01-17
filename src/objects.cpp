@@ -44,6 +44,8 @@ void PNU::CheckReply(std::unique_ptr<const std::vector<std::byte>>&& reply) {
     } catch (std::invalid_argument& ex) {
         std::cerr << "Неизвестный код ответа\n";
         // error_file << unknown reply;
+    } catch (std::domain_error&) {
+        // GetState(); TODO problems with recursive
     }
 }
 
@@ -78,6 +80,6 @@ void PNU::Reset() {
 }
 
 
+void Target::CreateLinearTrajectory(long double A, long double B, long double C, long double D, size_t count_points) {
 
-
-// logger
+}

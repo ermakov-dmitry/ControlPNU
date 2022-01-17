@@ -21,12 +21,14 @@ private:
     void GoToPoint(data_ptr&&);
     void MaxAccAndSpeed(data_ptr&&);
     void Reset(data_ptr&&);
+    void ParseError(uint16_t code) const;
+    void ParseUnitState(uint16_t unit_state) const;
     bool print_replies;
     bool log_replies;
-    Logger logger_;
+    mutable Logger logger_;
     Transformer transformer_;
     std::string print_message_;
-    // std::shared_ptr<Command> log_command_;  // TODO create answer commands
+    std::vector<std::string> log_command_;  // TODO create answer commands
 };
 
 #endif //DIPLOMA_READER_H

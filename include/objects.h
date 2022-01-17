@@ -42,4 +42,14 @@ private:
     bool is_log = false;
 };
 
+class Target {
+public:
+    Target() = default;
+    void CreateLinearTrajectory(long double A, long double B, long double C, long double D, size_t count_points);
+private:
+    std::vector<boost::geometry::model::point<long double, 3, boost::geometry::cs::cartesian>> trajectory_{};
+};
+
+// TODO may be change to namespace Trajectories
+
 #endif //DIPLOMA_OBJECTS_H
