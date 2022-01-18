@@ -42,11 +42,12 @@ void PNU::CheckReply(std::unique_ptr<const std::vector<std::byte>>&& reply) {
     try {
         reader_.UnpackReply(std::move(reply));
     } catch (std::invalid_argument& ex) {
-        std::cerr << "Неизвестный код ответа\n";
+        std::cerr << ex.what();
+        throw;
         // error_file << unknown reply;
-    } catch (std::domain_error&) {
-        // GetState(); TODO problems with recursive
-    }
+    } // catch (std::domain_error&) {
+        // GetState();  // TODO problems with recursive
+    // }
 }
 
 void PNU::GetState() {
@@ -79,7 +80,20 @@ void PNU::Reset() {
     connecter_.ResetPackageNumber();
 }
 
+Target::Target(long double x, long double y, long double z) : position_(x, y, z) {}
 
-void Target::CreateLinearTrajectory(long double A, long double B, long double C, long double D, size_t count_points) {
+void Target::NextStepPosition(long double dx, long double dy, long double dz) {
+    position_.set<0>(position_.get<0>() + dx);
+    position_.set<1>(position_.get<1>() + dy);
+    position_.set<2>(position_.get<2>() + dz);
+}
 
+boost::geometry::model::point<long double, 3, boost::geometry::cs::cartesian> Target::GetPosition() const {
+    return position_;
+}
+
+void Target::SetPosition(long double x, long double y, long double z) {
+    position_.set<0>(x);
+    position_.set<1>(y);
+    position_.set<2>(z);
 }

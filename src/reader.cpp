@@ -24,7 +24,7 @@ void Reader::UnpackReply(data_ptr&& reply) {
             break;
 
         default:
-            throw std::invalid_argument("Unknown reply");
+            throw std::invalid_argument("Unknown reply\n");
     }
     if (print_replies) {
         cout << print_message_ << '\n';
@@ -71,6 +71,7 @@ void Reader::ReadState(data_ptr&& reply) {
 
     long double coordinate_e = transformer_.MkradToDeg(*(uint16_t*)(reply->data() + 18));
     log_command_.push_back(to_string(coordinate_e));
+
     long double speed_e = transformer_.MkradToDeg(*(uint16_t*)(reply->data() + 20));
     log_command_.push_back(to_string(speed_e));
 
@@ -209,7 +210,7 @@ void Reader::ParseUnitState(uint16_t unit_state) const {
         state << "Сервоконтролеры оси поворота и оси наклона к работе готовы" << '\n';
     } else {
         logger_.LogMoveUnitState(state.str());
-        throw runtime_error("Сервоконтролеры оси поворота и оси наклона к работе не готовы!");
+        // throw runtime_error("Сервоконтролеры оси поворота и оси наклона к работе не готовы!");
     }
     if (unit_state & (1 << 1)) {
         state << "Сервоконтролеры оси поворота и оси наклона активны" << '\n';

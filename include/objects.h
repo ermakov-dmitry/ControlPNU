@@ -14,6 +14,8 @@ class PNUCreator;
 class PNU {
 public:
     friend PNUCreator;
+    PNU (const PNU&) = delete;
+    // operator=(const PNU&) = delete;
     void GetState();
     void GoToPoint(long double azimuth, long double elevator);
     void SetMaxAccelerationAndSpeed(long double max_acc_azimuth, long double max_acc_elevator,
@@ -44,10 +46,13 @@ private:
 
 class Target {
 public:
-    Target() = default;
-    void CreateLinearTrajectory(long double A, long double B, long double C, long double D, size_t count_points);
+    explicit Target(long double x, long double y, long double z);
+    void SetPosition(long double x, long double y, long double z);
+    void NextStepPosition(long double dx, long double dy, long double dz);
+    [[nodiscard]] boost::geometry::model::point<long double,
+    3, boost::geometry::cs::cartesian> GetPosition() const;
 private:
-    std::vector<boost::geometry::model::point<long double, 3, boost::geometry::cs::cartesian>> trajectory_{};
+    boost::geometry::model::point<long double, 3, boost::geometry::cs::cartesian> position_;
 };
 
 // TODO may be change to namespace Trajectories

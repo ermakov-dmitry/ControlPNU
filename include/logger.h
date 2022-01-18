@@ -7,6 +7,7 @@
 #include <vector>
 #include <chrono>
 #include <fstream>
+#include <sstream>
 
 class Logger {
 public:
@@ -21,6 +22,7 @@ private:
     std::chrono::steady_clock::time_point start_time_ = std::chrono::steady_clock::now();
     std::ofstream log_;
     std::ofstream errors_;
+    std::ofstream move_state_;
 };
 
 #endif //DIPLOMA_LOGGER_H
