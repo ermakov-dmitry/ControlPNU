@@ -21,6 +21,7 @@ public:
     void SetMaxAccelerationAndSpeed(long double max_acc_azimuth, long double max_acc_elevator,
                                     long double max_spd_azimuth, long double max_spd_elevator);
     void Reset();
+    void ReadReply();
 private:
     explicit PNU(std::string_view ip_address, int port, bool is_print, bool is_log);  // may be other for new objects
     void CheckReply(std::unique_ptr<const std::vector<std::byte>>&&);

@@ -1,5 +1,5 @@
 #include "objects.h"
-#include "scenarios.h"
+#include "modes.h"
 
 int main() {
     PNUCreator creator;
@@ -8,16 +8,11 @@ int main() {
             .PrintReplies(true)
             .LogReplies(true);
     PNU pnu = creator.CreatePNU();
-    ScreenwriterBuilder builder;
-    builder.SetTargetXStart(1)
-            .SetTargetYStart(2)
-            .SetTargetZStart(3);
-    Screenwriter screenwriter = builder.CreateScreenwriter(pnu);
-    // screenwriter.TargetLinearMotion();
-    pnu.Reset();
-    pnu.GetState();
-    pnu.GoToPoint(45, 135);
-    pnu.GetState();
-    pnu.Reset();
+    ModesBuilder builder;
+    builder.SetTargetXStart(100)
+            .SetTargetYStart(-500)
+            .SetTargetZStart(100);
+    Modes modes = builder.CreateModes(pnu);
+    modes.TargetLinearMotion();
     return 0;
 }

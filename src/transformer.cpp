@@ -23,5 +23,5 @@ boost::geometry::model::point<long double,
         boost::geometry::cs::spherical<boost::geometry::degree>> &spherical) {
     // TODO
     // transform from spherical to PNU azimuth and elevator
-    return {};
+    return {spherical.get<0>(), 270.0 - spherical.get<1>()};
 }

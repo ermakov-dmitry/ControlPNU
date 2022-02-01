@@ -5,8 +5,8 @@
     std::vector<std::byte> send_data(sizeof(message));\
     memcpy(send_data.data(), &message, sizeof(message));\
     connecter_.SendMessage(send_data);\
-    auto reply = connecter_.ReadMessage();\
-    CheckReply(std::move(reply))\
+    //auto reply = connecter_.ReadMessage();\
+    //CheckReply(std::move(reply))\
 
 
 PNUCreator &PNUCreator::SetIPAddress(std::string_view ip_address) {
@@ -78,6 +78,10 @@ void PNU::Reset() {
     message.command = 0x01F0;
     SEND(message);
     connecter_.ResetPackageNumber();
+}
+
+void PNU::ReadReply() {
+    CheckReply(std::move(connecter_.ReadMessage()));
 }
 
 Target::Target(long double x, long double y, long double z) : position_(x, y, z) {}
