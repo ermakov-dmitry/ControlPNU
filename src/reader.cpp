@@ -60,19 +60,19 @@ void Reader::ReadState(data_ptr&& reply) {
     uint16_t stat_error_a = *(uint16_t*)(reply->data() + 10);
     log_command_.push_back(to_string(stat_error_a));
 
-    long double coordinate_a = transformer_.MkradToDeg(*(uint16_t*)(reply->data() + 12));
+    long double coordinate_a = Transform::MkradToDeg(*(uint16_t*)(reply->data() + 12));
     log_command_.push_back(to_string(coordinate_a));
 
-    long double speed_a = transformer_.MkradToDeg(*(uint16_t*)(reply->data() + 14));
+    long double speed_a = Transform::MkradToDeg(*(uint16_t*)(reply->data() + 14));
     log_command_.push_back(to_string(speed_a));
 
     uint16_t stat_error_e = *(uint16_t*)(reply->data() + 16);
     log_command_.push_back(to_string(stat_error_e));
 
-    long double coordinate_e = transformer_.MkradToDeg(*(uint16_t*)(reply->data() + 18));
+    long double coordinate_e = Transform::MkradToDeg(*(uint16_t*)(reply->data() + 18));
     log_command_.push_back(to_string(coordinate_e));
 
-    long double speed_e = transformer_.MkradToDeg(*(uint16_t*)(reply->data() + 20));
+    long double speed_e = Transform::MkradToDeg(*(uint16_t*)(reply->data() + 20));
     log_command_.push_back(to_string(speed_e));
 
     uint16_t vcc_pwr_ae = *(uint16_t*)(reply->data() + 22);
@@ -103,10 +103,10 @@ void Reader::GoToPoint(data_ptr&& reply) {
     uint16_t n_packet = *(uint16_t*)(reply->data() + 2);
     log_command_.push_back(to_string(n_packet));
 
-    long double coordinate_a = transformer_.MkradToDeg(*(uint16_t*)(reply->data() + 4));
+    long double coordinate_a = Transform::MkradToDeg(*(uint16_t*)(reply->data() + 4));
     log_command_.push_back(to_string(coordinate_a));
 
-    long double coordinate_e = transformer_.MkradToDeg(*(uint16_t*)(reply->data() + 6));
+    long double coordinate_e = Transform::MkradToDeg(*(uint16_t*)(reply->data() + 6));
     log_command_.push_back(to_string(coordinate_e));
 
     print_message_ = "код ответа:                   " + to_string(code) + '\n' +
@@ -124,16 +124,16 @@ void Reader::MaxAccAndSpeed(data_ptr&& reply) {
     uint16_t n_packet = *(uint16_t*)(reply->data() + 2);
     log_command_.push_back(to_string(n_packet));
 
-    long double max_acc_a = transformer_.MkradToDeg(*(uint16_t*)(reply->data() + 4));
+    long double max_acc_a = Transform::MkradToDeg(*(uint16_t*)(reply->data() + 4));
     log_command_.push_back(to_string(max_acc_a));
 
-    long double max_acc_e = transformer_.MkradToDeg(*(uint16_t*)(reply->data() + 6));
+    long double max_acc_e = Transform::MkradToDeg(*(uint16_t*)(reply->data() + 6));
     log_command_.push_back(to_string(max_acc_e));
 
-    long double max_vel_a = transformer_.MkradToDeg(*(uint16_t*)(reply->data() + 8));
+    long double max_vel_a = Transform::MkradToDeg(*(uint16_t*)(reply->data() + 8));
     log_command_.push_back(to_string(max_vel_a));
 
-    long double max_vel_e = transformer_.MkradToDeg(*(uint16_t*)(reply->data() + 10));
+    long double max_vel_e = Transform::MkradToDeg(*(uint16_t*)(reply->data() + 10));
     log_command_.push_back(to_string(max_vel_e));
 
     print_message_ = "код ответа:                   " + to_string(code) + '\n' +

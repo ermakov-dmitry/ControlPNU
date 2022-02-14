@@ -51,13 +51,13 @@ void Modes::TargetLinearMotion() {
     pnu_.GetState();
     pnu_.GetState();
     pnu_.ReadReply();
-    auto spherical_target = Transformer::CartesianToSpherical(target_.GetPosition());
-    auto angles = Transformer::SphericalToPNU(spherical_target);
+    auto spherical_target = Transform::CartesianToSpherical(target_.GetPosition());
+    auto angles = Transform::SphericalToPNU(spherical_target);
     pnu_.GoToPoint(angles.get<0>(), angles.get<1>());
     pnu_.GetState();
     for (int t = 0; t <= time_end; t += dt) {
-        spherical_target = Transformer::CartesianToSpherical(target_.GetPosition());
-        angles = Transformer::SphericalToPNU(spherical_target);
+        spherical_target = Transform::CartesianToSpherical(target_.GetPosition());
+        angles = Transform::SphericalToPNU(spherical_target);
         pnu_.GoToPoint(angles.get<0>(), angles.get<1>());
         auto dx = Vx * dt / 1000;
         auto dy = Vy * dt / 1000;

@@ -29,8 +29,10 @@ PNUCreator &PNUCreator::LogReplies(bool flag) {
     return *this;
 }
 
-PNU PNUCreator::CreatePNU() {
-    return PNU(ip_address_, port_, is_print, is_log);
+std::unique_ptr<PNU> PNUCreator::CreatePNU() {
+    auto ptr = new PNU(ip_address_, port_, is_print, is_log);
+    std::unique_ptr<PNU> ret(ptr);
+    return ret;
 }
 
 PNU::PNU(std::string_view ip_address,
@@ -58,18 +60,18 @@ void PNU::GetState() {
 
 void PNU::GoToPoint(long double azimuth, long double elevator) {
     MoveToPoint message{};
-    message.azimuth = transformer_.DegToMkrad<uint16_t>(azimuth);
-    message.elevator = transformer_.DegToMkrad<uint16_t>(elevator);
+    message.azimuth = Transform::DegToMkrad<uint16_t>(azimuth);
+    message.elevator = Transform::DegToMkrad<uint16_t>(elevator);
     SEND(message);
 }
 
 void PNU::SetMaxAccelerationAndSpeed(long double max_acc_azimuth, long double max_acc_elevator,
                                      long double max_spd_azimuth, long double max_spd_elevator) {
     SetMaxAccAndSpeed message{};
-    message.max_accel_azimuth = transformer_.DegToMkrad<uint16_t>(max_acc_azimuth);
-    message.max_accel_elevator = transformer_.DegToMkrad<uint16_t>(max_acc_elevator);
-    message.max_velocity_azimuth = transformer_.DegToMkrad<uint16_t>(max_spd_azimuth);
-    message.max_velocity_elevator = transformer_.DegToMkrad<uint16_t>(max_spd_elevator);
+    message.max_accel_azimuth = Transform::DegToMkrad<uint16_t>(max_acc_azimuth);
+    message.max_accel_elevator = Transform::DegToMkrad<uint16_t>(max_acc_elevator);
+    message.max_velocity_azimuth = Transform::DegToMkrad<uint16_t>(max_spd_azimuth);
+    message.max_velocity_elevator = Transform::DegToMkrad<uint16_t>(max_spd_elevator);
     SEND(message);
 }
 

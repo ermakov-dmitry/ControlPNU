@@ -15,7 +15,9 @@ class PNU {
 public:
     friend PNUCreator;
     PNU (const PNU&) = delete;
-    // operator=(const PNU&) = delete;
+    PNU& operator=(const PNU&) = delete;
+    PNU (PNU&&) = delete;
+    PNU& operator=(PNU&&) = delete;
     void GetState();
     void GoToPoint(long double azimuth, long double elevator);
     void SetMaxAccelerationAndSpeed(long double max_acc_azimuth, long double max_acc_elevator,
@@ -25,7 +27,6 @@ public:
 private:
     explicit PNU(std::string_view ip_address, int port, bool is_print, bool is_log);  // may be other for new objects
     void CheckReply(std::unique_ptr<const std::vector<std::byte>>&&);
-    Transformer transformer_;
     mutable UDPConnecter connecter_;
     Reader reader_;
 };
@@ -37,7 +38,7 @@ public:
     PNUCreator& SetPort(int port);
     PNUCreator& PrintReplies(bool flag);
     PNUCreator& LogReplies(bool flag);
-    PNU CreatePNU();
+    std::unique_ptr<PNU> CreatePNU();
 private:
     std::string ip_address_ = "127.0.0.1";
     int port_ = 10'000;

@@ -26,7 +26,6 @@ private:
     bool print_replies;
     bool log_replies;
     mutable Logger logger_;
-    Transformer transformer_;
     std::string print_message_;
     std::vector<std::string> log_command_;  // TODO create answer commands
 };
