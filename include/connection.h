@@ -1,16 +1,27 @@
 #ifndef DIPLOMA_CONNECTION_H
 #define DIPLOMA_CONNECTION_H
 #pragma once
-#include <string_view>
+#include <string>
+#include <cstring>
 #include <iostream>
 #include <memory>
 #include <cstdint>
-#include <boost/asio.hpp>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <fcntl.h>
+#include <cstdio>
+#include <cstdlib>
+#include <unistd.h>
 #include "logger.h"
 
 class UDPConnecter {
 public:
-    explicit UDPConnecter(std::string_view ip_address, int port);
+    struct Socket {
+        int sockfd{};
+        struct sockaddr_in servaddr{};
+    };
+    explicit UDPConnecter(const std::string& ip_address, int port);
     void SendMessage(const std::vector<std::byte>&);
     std::unique_ptr<const std::vector<std::byte>> ReadMessage();
     [[nodiscard]] uint16_t GetPacketNumber() const;
@@ -18,10 +29,7 @@ public:
     ~UDPConnecter();
 
 private:
-    boost::asio::io_context io_context_;
-    boost::asio::ip::udp::resolver resolver_;
-    boost::asio::ip::udp::endpoint ep_;
-    boost::asio::ip::udp::socket sock_;
+    Socket socket_;
     uint16_t packet_number_;
 };
 
