@@ -11,7 +11,7 @@
 #include "transformer.h"
 
 class Reader{
-    using data_ptr = std::unique_ptr<const std::vector<std::byte>>;
+    using data_ptr = std::unique_ptr<const std::vector<char>>;
 public:
     explicit Reader(bool is_print, bool is_log);
     void UnpackReply(data_ptr&&);

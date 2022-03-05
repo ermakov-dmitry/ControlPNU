@@ -2,7 +2,7 @@
 
 #define SEND(message) \
     message.n_packet = connecter_.GetPacketNumber();\
-    std::vector<std::byte> send_data(sizeof(message));\
+    std::vector<char> send_data(sizeof(message));\
     memcpy(send_data.data(), &message, sizeof(message));\
     connecter_.SendMessage(send_data);\
     //auto reply = connecter_.ReadMessage();\
@@ -35,12 +35,12 @@ std::unique_ptr<PNU> PNUCreator::CreatePNU() {
     return ret;
 }
 
-PNU::PNU(std::string_view ip_address,
+PNU::PNU(const std::string& ip_address,
          int port, bool is_print,
          bool is_log) : connecter_(ip_address, port),
          reader_(is_print, is_log) {}
 
-void PNU::CheckReply(std::unique_ptr<const std::vector<std::byte>>&& reply) {
+void PNU::CheckReply(std::unique_ptr<const std::vector<char>>&& reply) {
     try {
         reader_.UnpackReply(std::move(reply));
     } catch (std::invalid_argument& ex) {
@@ -86,7 +86,7 @@ void PNU::ReadReply() {
     CheckReply(std::move(connecter_.ReadMessage()));
 }
 
-Target::Target(long double x, long double y, long double z) : position_(x, y, z) {}
+/*Target::Target(long double x, long double y, long double z) : position_(x, y, z) {}
 
 void Target::NextStepPosition(long double dx, long double dy, long double dz) {
     position_.set<0>(position_.get<0>() + dx);
@@ -102,4 +102,4 @@ void Target::SetPosition(long double x, long double y, long double z) {
     position_.set<0>(x);
     position_.set<1>(y);
     position_.set<2>(z);
-}
+}*/

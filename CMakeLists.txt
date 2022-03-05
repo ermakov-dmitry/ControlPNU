@@ -16,4 +16,4 @@ file(GLOB all_SRCS
         "${PROJECT_SOURCE_DIR}/src/*.c"
         )
 
-add_executable(Diploma ${all_SRCS})
+add_executable(Diploma ${all_SRCS} src/modes.cpp)

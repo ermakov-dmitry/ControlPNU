@@ -2,12 +2,12 @@
 
 using namespace std;
 
-Modes::Modes(PNU &pnu,
+/*Modes::Modes(PNU &pnu,
                            long double x,
                            long double y,
-                           long double z) : pnu_(pnu), target_(x, y, z) {}
+                           long double z) : pnu_(pnu), target_(x, y, z) {}*/
 
-ModesBuilder& ModesBuilder::SetTargetXStart(long double x) {
+/*ModesBuilder& ModesBuilder::SetTargetXStart(long double x) {
     x_ = x;
     return *this;
 }
@@ -20,13 +20,13 @@ ModesBuilder& ModesBuilder::SetTargetYStart(long double y) {
 ModesBuilder& ModesBuilder::SetTargetZStart(long double z) {
     z_ = z;
     return *this;
-}
+}*/
 
-Modes ModesBuilder::CreateModes(PNU &pnu) const {
+/*Modes ModesBuilder::CreateModes(PNU &pnu) const {
     return Modes(pnu, x_, y_, z_);
-}
+}*/
 
-void Modes::TargetLinearMotion() {
+/*void Modes::TargetLinearMotion() {
     long double Vx, Vy, Vz;
     int dt, time_end;
     cout << "Vx = ";
@@ -35,12 +35,12 @@ void Modes::TargetLinearMotion() {
     cin >> Vy;
     cout << "Vz = ";
     cin >> Vz;
-    /*cout << "ax = ";
+    *//*cout << "ax = ";
     cin >> ax;
     cout << "ay = ";
     cin >> ay;
     cout << "az = ";
-    cin >> az;*/
+    cin >> az;*//*
     cout << "dt (ms) = ";
     cin >> dt;
     cout << "t_end (sec) = ";
@@ -66,4 +66,4 @@ void Modes::TargetLinearMotion() {
         std::this_thread::sleep_for(std::chrono::milliseconds(dt));
     }
 
-}
+}*/

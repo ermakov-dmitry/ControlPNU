@@ -22,15 +22,15 @@ public:
         struct sockaddr_in servaddr{};
     };
     explicit UDPConnecter(const std::string& ip_address, int port);
-    void SendMessage(const std::vector<std::byte>&);
-    std::unique_ptr<const std::vector<std::byte>> ReadMessage();
+    void SendMessage(const std::vector<char>&);
+    [[nodiscard]] std::unique_ptr<const std::vector<char>> ReadMessage() const;
     [[nodiscard]] uint16_t GetPacketNumber() const;
     void ResetPackageNumber();
     ~UDPConnecter();
 
 private:
     Socket socket_;
-    uint16_t packet_number_;
+    uint16_t packet_number_ = 0;
 };
 
 #endif //DIPLOMA_CONNECTION_H

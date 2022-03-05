@@ -25,8 +25,8 @@ public:
     void Reset();
     void ReadReply();
 private:
-    explicit PNU(std::string_view ip_address, int port, bool is_print, bool is_log);  // may be other for new objects
-    void CheckReply(std::unique_ptr<const std::vector<std::byte>>&&);
+    explicit PNU(const std::string& ip_address, int port, bool is_print, bool is_log);  // may be other for new objects
+    void CheckReply(std::unique_ptr<const std::vector<char>>&&);
     mutable UDPConnecter connecter_;
     Reader reader_;
 };
@@ -46,7 +46,7 @@ private:
     bool is_log = false;
 };
 
-class Target {
+/*class Target {
 public:
     explicit Target(long double x, long double y, long double z);
     void SetPosition(long double x, long double y, long double z);
@@ -55,7 +55,7 @@ public:
     3, boost::geometry::cs::cartesian> GetPosition() const;
 private:
     boost::geometry::model::point<long double, 3, boost::geometry::cs::cartesian> position_;
-};
+};*/
 
 // TODO may be change to namespace Trajectories
 

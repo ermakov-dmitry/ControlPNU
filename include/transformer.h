@@ -1,10 +1,20 @@
 #ifndef DIPLOMA_TRANSFORMER_H
 #define DIPLOMA_TRANSFORMER_H
 #pragma once
-#include <boost/geometry/geometry.hpp>
 #include <cmath>
 
 namespace Transform {
+    struct Cartesian {
+        long double x;
+        long double y;
+        long double z;
+    };
+
+    struct Spherical {
+        long double range;
+        long double theta;
+        long double phi;
+    };
 
     template<typename T>
     [[nodiscard]] T RadToDeg(T rad) {
@@ -26,23 +36,8 @@ namespace Transform {
         return static_cast<T>(DegToRad((deg * 10'000)));
     }
 
-    [[nodiscard]] static boost::geometry::model::point<long double,
-    3, boost::geometry::cs::cartesian> CartesianToAvia(const boost::geometry::model::point<long double,
-            3, boost::geometry::cs::cartesian>&);
+    [[nodiscard]] Spherical CartesianToPNU (const Cartesian&);
 
-    [[nodiscard]] static boost::geometry::model::point<long double,
-            3, boost::geometry::cs::cartesian> AviaToCartesian(const boost::geometry::model::point<long double,
-            3, boost::geometry::cs::cartesian>&);
-
-    [[nodiscard]] static boost::geometry::model::point<long double,
-    3, boost::geometry::cs::spherical<boost::geometry::degree>>
-    CartesianToSpherical (const boost::geometry::model::point<long double,
-            3, boost::geometry::cs::cartesian>&);
-
-    [[nodiscard]] static boost::geometry::model::point<long double,
-            2, boost::geometry::cs::spherical<boost::geometry::degree>>
-    SphericalToPNU (const boost::geometry::model::point<long double,
-            3, boost::geometry::cs::spherical<boost::geometry::degree>>&);
 }
 
 

@@ -11,13 +11,13 @@ public:
     friend ModesBuilder;
     void TargetLinearMotion();
 private:
-    explicit Modes(PNU& pnu, long double x, long double y, long double z);
+    // explicit Modes(PNU& pnu, long double x, long double y, long double z);
     PNU& pnu_;
-    Target target_;
-    Transformer transformer_;
+    /*Target target_;
+    Transformer transformer_;*/
 };
 
-class ModesBuilder {
+/*class ModesBuilder {
 public:
     ModesBuilder& SetTargetXStart(long double x);
     ModesBuilder& SetTargetYStart(long double y);
@@ -27,6 +27,6 @@ private:
     long double x_ = 0;
     long double y_ = 0;
     long double z_ = 0;
-};
+};*/
 
 #endif //DIPLOMA_MODES_H

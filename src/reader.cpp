@@ -1,6 +1,6 @@
 #include "reader.h"
 
-// using data_ptr = std::unique_ptr<const std::vector<std::byte>>;
+// using data_ptr = std::unique_ptr<const std::vector<char>>;
 using namespace std;
 
 Reader::Reader(bool is_print, bool is_log) : print_replies(is_print), log_replies(is_log) {}
