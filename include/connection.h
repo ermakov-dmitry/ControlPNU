@@ -17,10 +17,6 @@
 
 class UDPConnecter {
 public:
-    struct Socket {
-        int sockfd{};
-        struct sockaddr_in servaddr{};
-    };
     explicit UDPConnecter(const std::string& ip_address, int port);
     void SendMessage(const std::vector<char>&);
     [[nodiscard]] std::unique_ptr<const std::vector<char>> ReadMessage() const;
@@ -29,6 +25,10 @@ public:
     ~UDPConnecter();
 
 private:
+    struct Socket {
+        int sockfd{};
+        struct sockaddr_in servaddr{};
+    };
     Socket socket_;
     uint16_t packet_number_ = 0;
 };

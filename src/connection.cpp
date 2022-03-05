@@ -4,7 +4,7 @@ using namespace std;
 
 UDPConnecter::UDPConnecter(const std::string& ip_address, int port) {
 
-    if ((socket_.sockfd = socket(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK, 0)) < 0) {
+    if ((socket_.sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
         perror("socket creation failed");
         exit(EXIT_FAILURE);
     }
@@ -12,11 +12,11 @@ UDPConnecter::UDPConnecter(const std::string& ip_address, int port) {
     socket_.servaddr.sin_family = AF_INET;
     socket_.servaddr.sin_port = htons(port);
     socket_.servaddr.sin_addr.s_addr = inet_addr(ip_address.c_str());
-    if (bind(socket_.sockfd,
+    /*if (bind(socket_.sockfd,
   (const struct sockaddr *)&socket_.servaddr,
     sizeof(socket_.servaddr)) < 0 ) {
         throw runtime_error("bind failed");
-    }
+    }*/
 }
 
 UDPConnecter::~UDPConnecter() {
@@ -32,14 +32,28 @@ void UDPConnecter::SendMessage(const std::vector<char>& data) {
 
 std::unique_ptr<const std::vector<char>> UDPConnecter::ReadMessage() const {
     std::vector<char> data(1024);
-    int addr_len;
-    size_t n;
-    do {
+    bool is_wait = true;
+    size_t resize_value = 0;
+    /*do {
         n = recvfrom(socket_.sockfd, data.data(),
-                     1024, 0, (sockaddr*)&socket_.servaddr,
+                     1024, MSG_WAITALL, (sockaddr*)&socket_.servaddr,
                      (socklen_t*)(&addr_len));
-    } while (n != 0);
-    data.resize(n);
+        if (n != -1) {
+            is_wait = false;
+            resize_value = n;
+        }
+    } while (n != -1 || is_wait);*/
+    ssize_t bytes_read;
+    int flag = MSG_WAITALL;
+    do {
+        bytes_read = recv(socket_.sockfd, data.data(), 1024, flag);
+        if (bytes_read > 0) {
+            is_wait = false;
+            resize_value = bytes_read;
+            flag = MSG_DONTWAIT;
+        }
+    } while (bytes_read > 0 || is_wait);
+    data.resize(resize_value);
     data.shrink_to_fit();
     return std::make_unique<const std::vector<char>>(data);
 }
