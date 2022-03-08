@@ -13,10 +13,10 @@ void Logger::LogStateCriticalErrors(const string& critical_errors) {
     errors_ << duration_cast<seconds>(dur).count() << " seconds:\n" << critical_errors;
 }
 
-void Logger::LogData(unique_ptr<vector<string>>&& data) {
+void Logger::LogData(vector<string>&& data) {
     auto dur = steady_clock::now() - start_time_;
     log_ << duration_cast<milliseconds>(dur).count();
-    for (const auto& value : *data) {
+    for (const auto& value : data) {
         log_ << ',' << value;
     }
     log_ << '\n';

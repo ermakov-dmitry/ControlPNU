@@ -15,7 +15,7 @@ public:
     void LogStateErrors(const std::string& errors);
     void LogStateCriticalErrors(const std::string& critical_errors);
     void LogMoveUnitState(const std::string& state);
-    void LogData(std::unique_ptr<std::vector<std::string>>&& data);
+    void LogData(std::vector<std::string>&& data);
     ~Logger();
 
 private:

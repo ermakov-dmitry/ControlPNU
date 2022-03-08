@@ -9,38 +9,12 @@
     //CheckReply(std::move(reply))\
 
 
-PNUCreator &PNUCreator::SetIPAddress(const std::string& ip_address) {
-    ip_address_ = ip_address;
-    return *this;
-}
-
-PNUCreator &PNUCreator::SetPort(int port) {
-    port_ = port;
-    return *this;
-}
-
-PNUCreator &PNUCreator::PrintReplies(bool flag) {
-    is_print = flag;
-    return *this;
-}
-
-PNUCreator &PNUCreator::LogReplies(bool flag) {
-    is_log = flag;
-    return *this;
-}
-
-std::unique_ptr<PNU> PNUCreator::CreatePNU() {
-    auto ptr = new PNU(ip_address_, port_, is_print, is_log);
-    std::unique_ptr<PNU> ret(ptr);
-    return ret;
-}
-
 PNU::PNU(const std::string& ip_address,
          int port, bool is_print,
          bool is_log) : connecter_(ip_address, port),
          reader_(is_print, is_log) {}
 
-void PNU::CheckReply(std::unique_ptr<const std::vector<char>>&& reply) {
+void PNU::CheckReply(std::vector<char>&& reply) {
     try {
         reader_.UnpackReply(std::move(reply));
     } catch (std::invalid_argument& ex) {

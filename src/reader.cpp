@@ -6,7 +6,7 @@ using namespace std;
 Reader::Reader(bool is_print, bool is_log) : print_replies(is_print), log_replies(is_log) {}
 
 void Reader::UnpackReply(data_ptr&& reply) {
-    uint16_t code = *(uint16_t*)reply->data();
+    uint16_t code = *(uint16_t*)reply.data();
     switch (code) {
         case 0x8100:
             ReadState(move(reply));
@@ -30,7 +30,7 @@ void Reader::UnpackReply(data_ptr&& reply) {
         cout << print_message_ << '\n';
     }
     if (log_replies) {
-        logger_.LogData(make_unique<vector<string>>(move(log_command_)));
+        logger_.LogData((move(log_command_)));
     } else {
         log_command_.clear();
     }
@@ -40,42 +40,42 @@ void Reader::UnpackReply(data_ptr&& reply) {
 void Reader::ReadState(data_ptr&& reply) {
     log_command_.reserve(12);
 
-    uint16_t code = *(uint16_t*)reply->data();
+    uint16_t code = *(uint16_t*)reply.data();
     log_command_.push_back(to_string(code));
 
-    uint16_t n_packet = *(uint16_t*)(reply->data() + 2);
+    uint16_t n_packet = *(uint16_t*)(reply.data() + 2);
     log_command_.push_back(to_string(n_packet));
 
-    uint16_t error_code = *(uint16_t*)(reply->data() + 4);
+    uint16_t error_code = *(uint16_t*)(reply.data() + 4);
     log_command_.push_back(to_string(error_code));
     ParseError(error_code);
 
-    uint16_t count_point_in_buffer = *(uint16_t*)(reply->data() + 6);
+    uint16_t count_point_in_buffer = *(uint16_t*)(reply.data() + 6);
     log_command_.push_back(to_string(count_point_in_buffer));
 
-    uint16_t move_unit_state = *(uint16_t*)(reply->data() + 8);
+    uint16_t move_unit_state = *(uint16_t*)(reply.data() + 8);
     log_command_.push_back(to_string(move_unit_state));
     ParseUnitState(move_unit_state);
 
-    uint16_t stat_error_a = *(uint16_t*)(reply->data() + 10);
+    uint16_t stat_error_a = *(uint16_t*)(reply.data() + 10);
     log_command_.push_back(to_string(stat_error_a));
 
-    long double coordinate_a = Transform::MkradToDeg(*(uint16_t*)(reply->data() + 12));
+    long double coordinate_a = Transform::MkradToDeg(*(uint16_t*)(reply.data() + 12));
     log_command_.push_back(to_string(coordinate_a));
 
-    long double speed_a = Transform::MkradToDeg(*(uint16_t*)(reply->data() + 14));
+    long double speed_a = Transform::MkradToDeg(*(uint16_t*)(reply.data() + 14));
     log_command_.push_back(to_string(speed_a));
 
-    uint16_t stat_error_e = *(uint16_t*)(reply->data() + 16);
+    uint16_t stat_error_e = *(uint16_t*)(reply.data() + 16);
     log_command_.push_back(to_string(stat_error_e));
 
-    long double coordinate_e = Transform::MkradToDeg(*(uint16_t*)(reply->data() + 18));
+    long double coordinate_e = Transform::MkradToDeg(*(uint16_t*)(reply.data() + 18));
     log_command_.push_back(to_string(coordinate_e));
 
-    long double speed_e = Transform::MkradToDeg(*(uint16_t*)(reply->data() + 20));
+    long double speed_e = Transform::MkradToDeg(*(uint16_t*)(reply.data() + 20));
     log_command_.push_back(to_string(speed_e));
 
-    uint16_t vcc_pwr_ae = *(uint16_t*)(reply->data() + 22);
+    uint16_t vcc_pwr_ae = *(uint16_t*)(reply.data() + 22);
     log_command_.push_back(to_string(vcc_pwr_ae));
     // TODO create vcc method
 
@@ -97,16 +97,16 @@ void Reader::ReadState(data_ptr&& reply) {
 void Reader::GoToPoint(data_ptr&& reply) {
     log_command_.reserve(4);
 
-    uint16_t code = *(uint16_t*)reply->data();
+    uint16_t code = *(uint16_t*)reply.data();
     log_command_.push_back(to_string(code));
 
-    uint16_t n_packet = *(uint16_t*)(reply->data() + 2);
+    uint16_t n_packet = *(uint16_t*)(reply.data() + 2);
     log_command_.push_back(to_string(n_packet));
 
-    long double coordinate_a = Transform::MkradToDeg(*(uint16_t*)(reply->data() + 4));
+    long double coordinate_a = Transform::MkradToDeg(*(uint16_t*)(reply.data() + 4));
     log_command_.push_back(to_string(coordinate_a));
 
-    long double coordinate_e = Transform::MkradToDeg(*(uint16_t*)(reply->data() + 6));
+    long double coordinate_e = Transform::MkradToDeg(*(uint16_t*)(reply.data() + 6));
     log_command_.push_back(to_string(coordinate_e));
 
     print_message_ = "код ответа:                   " + to_string(code) + '\n' +
@@ -118,22 +118,22 @@ void Reader::GoToPoint(data_ptr&& reply) {
 void Reader::MaxAccAndSpeed(data_ptr&& reply) {
     log_command_.reserve(6);
 
-    uint16_t code = *(uint16_t*)reply->data();
+    uint16_t code = *(uint16_t*)reply.data();
     log_command_.push_back(to_string(code));
 
-    uint16_t n_packet = *(uint16_t*)(reply->data() + 2);
+    uint16_t n_packet = *(uint16_t*)(reply.data() + 2);
     log_command_.push_back(to_string(n_packet));
 
-    long double max_acc_a = Transform::MkradToDeg(*(uint16_t*)(reply->data() + 4));
+    long double max_acc_a = Transform::MkradToDeg(*(uint16_t*)(reply.data() + 4));
     log_command_.push_back(to_string(max_acc_a));
 
-    long double max_acc_e = Transform::MkradToDeg(*(uint16_t*)(reply->data() + 6));
+    long double max_acc_e = Transform::MkradToDeg(*(uint16_t*)(reply.data() + 6));
     log_command_.push_back(to_string(max_acc_e));
 
-    long double max_vel_a = Transform::MkradToDeg(*(uint16_t*)(reply->data() + 8));
+    long double max_vel_a = Transform::MkradToDeg(*(uint16_t*)(reply.data() + 8));
     log_command_.push_back(to_string(max_vel_a));
 
-    long double max_vel_e = Transform::MkradToDeg(*(uint16_t*)(reply->data() + 10));
+    long double max_vel_e = Transform::MkradToDeg(*(uint16_t*)(reply.data() + 10));
     log_command_.push_back(to_string(max_vel_e));
 
     print_message_ = "код ответа:                   " + to_string(code) + '\n' +
@@ -147,10 +147,10 @@ void Reader::MaxAccAndSpeed(data_ptr&& reply) {
 void Reader::Reset(data_ptr&& reply) {
     log_command_.reserve(2);
 
-    uint16_t code = *(uint16_t*)reply->data();
+    uint16_t code = *(uint16_t*)reply.data();
     log_command_.push_back(to_string(code));
 
-    uint16_t n_packet = *(uint16_t*)(reply->data() + 2);
+    uint16_t n_packet = *(uint16_t*)(reply.data() + 2);
     log_command_.push_back(to_string(n_packet));
 
     print_message_ = "код ответа:                   " + to_string(code) + '\n' +

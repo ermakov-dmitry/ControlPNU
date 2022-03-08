@@ -19,7 +19,7 @@ class UDPConnecter {
 public:
     explicit UDPConnecter(const std::string& ip_address, int port);
     void SendMessage(const std::vector<char>&);
-    [[nodiscard]] std::unique_ptr<const std::vector<char>> ReadMessage() const;
+    std::vector<char> ReadMessage() const;
     [[nodiscard]] uint16_t GetPacketNumber() const;
     void ResetPackageNumber();
     ~UDPConnecter();

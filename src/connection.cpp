@@ -20,7 +20,6 @@ UDPConnecter::UDPConnecter(const std::string& ip_address, int port) {
 }
 
 UDPConnecter::~UDPConnecter() {
-    // sock_.close();
     close(socket_.sockfd);
 }
 
@@ -30,7 +29,7 @@ void UDPConnecter::SendMessage(const std::vector<char>& data) {
     packet_number_++;
 }
 
-std::unique_ptr<const std::vector<char>> UDPConnecter::ReadMessage() const {
+std::vector<char> UDPConnecter::ReadMessage() const {
     std::vector<char> data(1024);
     bool is_wait = true;
     size_t resize_value = 0;
@@ -46,7 +45,7 @@ std::unique_ptr<const std::vector<char>> UDPConnecter::ReadMessage() const {
     } while (bytes_read > 0 || is_wait);
     data.resize(resize_value);
     data.shrink_to_fit();
-    return std::make_unique<const std::vector<char>>(data);
+    return data;
 }
 
 uint16_t UDPConnecter::GetPacketNumber() const {
