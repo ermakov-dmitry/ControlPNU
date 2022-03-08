@@ -28,12 +28,12 @@ namespace Transform {
 
     template<typename T>
     long double MkradToDeg(T mkrad) {
-        return RadToDeg(static_cast<double>(mkrad) / 10'000.0);
+        return RadToDeg(static_cast<double>(mkrad) / 10000.0);
     }
 
     template<typename T>
     T DegToMkrad(long double deg) {
-        return static_cast<T>(DegToRad((deg * 10'000)));
+        return static_cast<T>(DegToRad((deg * 10000)));
     }
 
     [[nodiscard]] Spherical CartesianToPNU (const Cartesian&);

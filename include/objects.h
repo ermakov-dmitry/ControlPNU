@@ -34,29 +34,17 @@ private:
 class PNUCreator {
 public:
     PNUCreator() = default;
-    PNUCreator& SetIPAddress(std::string_view ip_address);
+    PNUCreator& SetIPAddress(const std::string& ip_address);
     PNUCreator& SetPort(int port);
     PNUCreator& PrintReplies(bool flag);
     PNUCreator& LogReplies(bool flag);
     std::unique_ptr<PNU> CreatePNU();
 private:
     std::string ip_address_ = "127.0.0.1";
-    int port_ = 10'000;
+    int port_ = 10000;
     bool is_print = false;
     bool is_log = false;
 };
 
-/*class Target {
-public:
-    explicit Target(long double x, long double y, long double z);
-    void SetPosition(long double x, long double y, long double z);
-    void NextStepPosition(long double dx, long double dy, long double dz);
-    [[nodiscard]] boost::geometry::model::point<long double,
-    3, boost::geometry::cs::cartesian> GetPosition() const;
-private:
-    boost::geometry::model::point<long double, 3, boost::geometry::cs::cartesian> position_;
-};*/
-
-// TODO may be change to namespace Trajectories
 
 #endif //DIPLOMA_OBJECTS_H

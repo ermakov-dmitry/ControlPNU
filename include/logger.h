@@ -12,9 +12,9 @@
 class Logger {
 public:
     Logger();
-    void LogStateErrors(std::string_view errors);
-    void LogStateCriticalErrors(std::string_view critical_errors);
-    void LogMoveUnitState(std::string_view state);
+    void LogStateErrors(const std::string& errors);
+    void LogStateCriticalErrors(const std::string& critical_errors);
+    void LogMoveUnitState(const std::string& state);
     void LogData(std::unique_ptr<std::vector<std::string>>&& data);
     ~Logger();
 

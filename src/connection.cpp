@@ -34,15 +34,6 @@ std::unique_ptr<const std::vector<char>> UDPConnecter::ReadMessage() const {
     std::vector<char> data(1024);
     bool is_wait = true;
     size_t resize_value = 0;
-    /*do {
-        n = recvfrom(socket_.sockfd, data.data(),
-                     1024, MSG_WAITALL, (sockaddr*)&socket_.servaddr,
-                     (socklen_t*)(&addr_len));
-        if (n != -1) {
-            is_wait = false;
-            resize_value = n;
-        }
-    } while (n != -1 || is_wait);*/
     ssize_t bytes_read;
     int flag = MSG_WAITALL;
     do {

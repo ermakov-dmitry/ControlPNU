@@ -4,7 +4,7 @@ std::unique_ptr<PNU> pnu;
 
 void Init() {
     PNUCreator creator;
-    creator.SetIPAddress("192.168.6.2").SetPort(10'000)
+    creator.SetIPAddress("192.168.6.2").SetPort(10000)
     .PrintReplies(true).LogReplies(false);
     std::unique_ptr<PNU> pnu_local = creator.CreatePNU();
     pnu.swap(pnu_local);

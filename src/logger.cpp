@@ -3,12 +3,12 @@
 using namespace std::chrono;
 using namespace std;
 
-void Logger::LogStateErrors(string_view errors) {
+void Logger::LogStateErrors(const string& errors) {
     auto dur = steady_clock::now() - start_time_;
     errors_ << duration_cast<seconds>(dur).count() << " seconds:\n" << errors;
 }
 
-void Logger::LogStateCriticalErrors(string_view critical_errors) {
+void Logger::LogStateCriticalErrors(const string& critical_errors) {
     auto dur = steady_clock::now() - start_time_;
     errors_ << duration_cast<seconds>(dur).count() << " seconds:\n" << critical_errors;
 }
@@ -22,7 +22,7 @@ void Logger::LogData(unique_ptr<vector<string>>&& data) {
     log_ << '\n';
 }
 
-void Logger::LogMoveUnitState(string_view state) {
+void Logger::LogMoveUnitState(const string& state) {
     auto dur = steady_clock::now() - start_time_;
     move_state_ << duration_cast<seconds>(dur).count() << " seconds:\n" << state;
 }

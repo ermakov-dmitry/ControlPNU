@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.21)
 project(Diploma)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
 include_directories(
@@ -16,4 +16,4 @@ file(GLOB all_SRCS
         "${PROJECT_SOURCE_DIR}/src/*.c"
         )
 
-add_executable(Diploma ${all_SRCS} src/modes.cpp)
+add_executable(Diploma ${all_SRCS})

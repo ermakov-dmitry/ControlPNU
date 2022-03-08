@@ -9,7 +9,7 @@
     //CheckReply(std::move(reply))\
 
 
-PNUCreator &PNUCreator::SetIPAddress(std::string_view ip_address) {
+PNUCreator &PNUCreator::SetIPAddress(const std::string& ip_address) {
     ip_address_ = ip_address;
     return *this;
 }
@@ -85,21 +85,3 @@ void PNU::Reset() {
 void PNU::ReadReply() {
     CheckReply(std::move(connecter_.ReadMessage()));
 }
-
-/*Target::Target(long double x, long double y, long double z) : position_(x, y, z) {}
-
-void Target::NextStepPosition(long double dx, long double dy, long double dz) {
-    position_.set<0>(position_.get<0>() + dx);
-    position_.set<1>(position_.get<1>() + dy);
-    position_.set<2>(position_.get<2>() + dz);
-}
-
-boost::geometry::model::point<long double, 3, boost::geometry::cs::cartesian> Target::GetPosition() const {
-    return position_;
-}
-
-void Target::SetPosition(long double x, long double y, long double z) {
-    position_.set<0>(x);
-    position_.set<1>(y);
-    position_.set<2>(z);
-}*/
