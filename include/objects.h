@@ -5,32 +5,32 @@
 #include <memory>
 #include "connection.h"
 #include "transformer.h"
-#include "logger.h"
 #include "reader.h"
 #include "commands.h"
 
-class PNUCreator;
 
 class PNU {
 public:
-    friend PNUCreator;
-    PNU (const PNU&) = delete;
-    PNU& operator=(const PNU&) = delete;
-    PNU (PNU&&) = delete;
-    PNU& operator=(PNU&&) = delete;
-    explicit PNU(const std::string& ip_address, int port, bool is_print, bool is_log);  // may be other for new objects
+    explicit PNU(const std::string& ip_address, int port, bool is_print);  // may be other for new objects
     void GetState();
-    void GoToPoint(long double azimuth, long double elevator);
-    void SetMaxAccelerationAndSpeed(long double max_acc_azimuth, long double max_acc_elevator,
-                                    long double max_spd_azimuth, long double max_spd_elevator);
+    void GoToPoint(double azimuth, double elevator);
+    void SetMaxAccelerationAndSpeed(double max_acc_azimuth, double max_acc_elevator,
+                                    double max_spd_azimuth, double max_spd_elevator);
     void Reset();
     void ReadReply();
+    ~PNU();
 private:
-    void CheckReply(std::vector<char>&&);
+    char* reply_pnu_;
+    void CheckReply();
     UDPConnecter connecter_;
     Reader reader_;
 };
 
+extern PNU* pPNU;
+void CreatePNU();
+void InitPNU();
+void CalculatePNU();
+void StopPNU();
 
 
 #endif //DIPLOMA_OBJECTS_H

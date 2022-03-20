@@ -5,32 +5,36 @@
 #include <cstring>
 #include <iostream>
 #include <memory>
+#ifdef LOCAL_MACHINE
 #include <cstdint>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <fcntl.h>
+#else
+#include "sockLib.h"
+#include "inetLib.h"
+#endif
 #include <cstdio>
 #include <cstdlib>
 #include <unistd.h>
-#include "logger.h"
 
 class UDPConnecter {
 public:
-    explicit UDPConnecter(const std::string& ip_address, int port);
-    void SendMessage(const std::vector<char>&);
-    std::vector<char> ReadMessage() const;
-    [[nodiscard]] uint16_t GetPacketNumber() const;
+    explicit UDPConnecter(const std::string& ip_address, int port, char* data);
+    void SendMessage(char*);
+    void ReadMessage() const;
+    unsigned short GetPacketNumber() const;
     void ResetPackageNumber();
     ~UDPConnecter();
 
 private:
+    unsigned short packet_number_;
     struct Socket {
-        int sockfd{};
-        struct sockaddr_in servaddr{};
+        int sockfd;
+        struct sockaddr_in servaddr;
     };
+    char* reply_;
     Socket socket_;
-    uint16_t packet_number_ = 0;
 };
 
 #endif //DIPLOMA_CONNECTION_H

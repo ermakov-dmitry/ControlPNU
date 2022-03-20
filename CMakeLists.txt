@@ -2,18 +2,21 @@ cmake_minimum_required(VERSION 3.21)
 project(Diploma)
 
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+add_definitions(-DLOCAL_MACHINE)
 
 include_directories(
         ${PROJECT_SOURCE_DIR}/include
         ${PROJECT_SOURCE_DIR}/src
 )
 
-file(GLOB all_SRCS
-        "${PROJECT_SOURCE_DIR}/include/*.h"
-        "${PROJECT_SOURCE_DIR}/include/*.hpp"
-        "${PROJECT_SOURCE_DIR}/src/*.cpp"
-        "${PROJECT_SOURCE_DIR}/src/*.c"
-        )
-
-add_executable(Diploma ${all_SRCS})
+add_executable(${PROJECT_NAME}
+        ${PROJECT_SOURCE_DIR}/include/commands.h
+        ${PROJECT_SOURCE_DIR}/include/connection.h
+        ${PROJECT_SOURCE_DIR}/include/objects.h
+        ${PROJECT_SOURCE_DIR}/include/reader.h
+        ${PROJECT_SOURCE_DIR}/include/transformer.h
+        ${PROJECT_SOURCE_DIR}/src/connection.cpp
+        ${PROJECT_SOURCE_DIR}/src/objects.cpp
+        ${PROJECT_SOURCE_DIR}/src/reader.cpp
+        ${PROJECT_SOURCE_DIR}/src/transformer.cpp
+        ${PROJECT_SOURCE_DIR}/src/main.cpp)
