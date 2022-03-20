@@ -28,13 +28,16 @@ void UDPConnecter::ReadMessage() const {
   bool is_wait = true;
   ssize_t bytes_read;
   int flag = MSG_WAITALL;
+  char* data = new char[1024];
   do {
-    bytes_read = recv(socket_.sockfd, reply_, 1024, flag);
+    bytes_read = recv(socket_.sockfd, data, 1024, flag);
     if (bytes_read > 0) {
       is_wait = false;
+      memcpy(reply_, data, bytes_read);
       flag = MSG_DONTWAIT;
     }
   } while (bytes_read > 0 || is_wait);
+  delete[] data;
 }
 
 unsigned short UDPConnecter::GetPacketNumber() const {
