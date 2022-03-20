@@ -18,6 +18,7 @@ public:
                                     double max_spd_azimuth, double max_spd_elevator);
     void Reset();
     void ReadReply();
+    void ChangeIPAddress(const char* ip);
     ~PNU();
 private:
     char* reply_pnu_;

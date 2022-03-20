@@ -2,8 +2,8 @@
 
 using namespace std;
 
-UDPConnecter::UDPConnecter(const std::string& ip_address, int port, char* data) {
-
+UDPConnecter::UDPConnecter(const std::string& ip_address, int port, char* data) : ip_address_(ip_address),
+port_(port), packet_number_(1), reply_(data) {
   if ((socket_.sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
     perror("socket creation failed");
     exit(EXIT_FAILURE);
@@ -12,8 +12,6 @@ UDPConnecter::UDPConnecter(const std::string& ip_address, int port, char* data) 
   socket_.servaddr.sin_family = AF_INET;
   socket_.servaddr.sin_port = htons(port);
   socket_.servaddr.sin_addr.s_addr = inet_addr(ip_address.c_str());
-  reply_ = data;
-  packet_number_ = 1;
 }
 
 UDPConnecter::~UDPConnecter() {
@@ -45,4 +43,18 @@ unsigned short UDPConnecter::GetPacketNumber() const {
 
 void UDPConnecter::ResetPackageNumber() {
   packet_number_ = 1;
+}
+
+void UDPConnecter::ChangeIP(const string &ip_address) {
+  close(socket_.sockfd);
+  if ((socket_.sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+    perror("socket creation failed");
+    exit(EXIT_FAILURE);
+  }
+  memset(&socket_.servaddr, 0, sizeof(socket_.servaddr));
+  socket_.servaddr.sin_family = AF_INET;
+  socket_.servaddr.sin_port = htons(port_);
+  socket_.servaddr.sin_addr.s_addr = inet_addr(ip_address.c_str());
+  packet_number_ = 1;
+  ip_address_ = ip_address;
 }

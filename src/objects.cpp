@@ -72,6 +72,22 @@ void PNU::ReadReply() {
   CheckReply();
 }
 
+void PNU::ChangeIPAddress(const char* ip) {
+  SetNewIP message;
+  message.command = 0x0F00;
+  sscanf(ip, "%d.%d.%d.%d", &message.ip_adr[0], &message.ip_adr[1], &message.ip_adr[2], &message.ip_adr[3]);
+  for (size_t i = 0; i < 4; i++) {
+    message.copy_ip_adr[i] = message.ip_adr[i];
+  }
+  message.n_packet = connecter_.GetPacketNumber();
+  char* send_data = new char[sizeof(message)];
+  memcpy(send_data, &message, sizeof(message));
+  connecter_.SendMessage(send_data);
+  delete[] send_data;
+  connecter_.ChangeIP(std::string(ip));
+  // may be reset and ping from terminal for test
+}
+
 void CreatePNU() {
   if (pPNU == NULL)
     pPNU = new PNU("192.168.6.2", 10000, false);
@@ -79,6 +95,7 @@ void CreatePNU() {
 
 void InitPNU() {
   if (pPNU) {
+    pPNU->ChangeIPAddress("192.168.59.218");
     pPNU->Reset();
     pPNU->ReadReply();
     pPNU->GetState();

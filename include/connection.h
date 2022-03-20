@@ -18,6 +18,8 @@
 #include <cstdlib>
 #include <unistd.h>
 
+class PNU;
+
 class UDPConnecter {
 public:
     explicit UDPConnecter(const std::string& ip_address, int port, char* data);
@@ -26,13 +28,16 @@ public:
     unsigned short GetPacketNumber() const;
     void ResetPackageNumber();
     ~UDPConnecter();
-
+    friend PNU;
 private:
+    int port_;
+    std::string ip_address_;
     unsigned short packet_number_;
     struct Socket {
         int sockfd;
         struct sockaddr_in servaddr;
     };
+    void ChangeIP(const std::string& ip_address);
     char* reply_;
     Socket socket_;
 };
