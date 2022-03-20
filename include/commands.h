@@ -1,6 +1,5 @@
 #ifndef DIPLOMA_COMMANDS_H
 #define DIPLOMA_COMMANDS_H
-#include <cstdint>
 #pragma once
 #pragma pack(push, 1)
 
@@ -54,6 +53,14 @@ struct SetNewUDPPort {
     unsigned short n_packet;
     unsigned short udp_port;
     unsigned short copy_udp_port;
+};
+
+struct Setup {
+    bool manual_mode;
+    double azimuth;
+    double elevator;
+    double azimuth_offset;
+    double elevator_offset;
 };
 
 #pragma pack(pop)
