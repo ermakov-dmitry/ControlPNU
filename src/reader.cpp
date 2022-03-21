@@ -75,7 +75,7 @@ void Reader::ReadState() {
   //log_command_.push_back(to_string(vcc_pwr_ae));
   // TODO create vcc method
 
-  /*print_message_ = "код ответа:                   " + to_string(code) + '\n' +
+  print_message_ = "код ответа:                   " + to_string(code) + '\n' +
                    "номер пакета:                 " + to_string(n_packet) + '\n' +
                    "код ошибки:                   " + to_string(error_code) + '\n' +
                    "кол-во точек в буфере:        " + to_string(count_point_in_buffer) + '\n' +
@@ -86,7 +86,7 @@ void Reader::ReadState() {
                    "копия состояния оси наклона:  " + to_string(stat_error_e) + '\n' +
                    "координата оси наклона:       " + to_string(coordinate_e) + '\n' +
                    "скорость оси наклона:         " + to_string(speed_e) + '\n' +
-                   "напряжение сервоконтроллеров: " + to_string(vcc_pwr_ae) + '\n';*/
+                   "напряжение сервоконтроллеров: " + to_string(vcc_pwr_ae) + '\n';
 
 }
 
@@ -105,10 +105,10 @@ void Reader::GoToPoint() {
   long double coordinate_e = Transform::MkradToDeg(*(uint16_t*)(reply_ + 6));
   //log_command_.push_back(to_string(coordinate_e));
 
-  /*print_message_ = "код ответа:                   " + to_string(code) + '\n' +
+  print_message_ = "код ответа:                   " + to_string(code) + '\n' +
                    "номер пакета:                 " + to_string(n_packet) + '\n' +
                    "координата оси поворота:      " + to_string(coordinate_a) + '\n' +
-                   "координата оси наклона:       " + to_string(coordinate_e) + '\n';*/
+                   "координата оси наклона:       " + to_string(coordinate_e) + '\n';
 }
 
 void Reader::MaxAccAndSpeed() {
@@ -132,12 +132,12 @@ void Reader::MaxAccAndSpeed() {
   long double max_vel_e = Transform::MkradToDeg(*(uint16_t*)(reply_ + 10));
   //log_command_.push_back(to_string(max_vel_e));
 
-  /*print_message_ = "код ответа:                   " + to_string(code) + '\n' +
+  print_message_ = "код ответа:                   " + to_string(code) + '\n' +
                    "номер пакета:                 " + to_string(n_packet) + '\n' +
                    "макс ускорение оси поворота:  " + to_string(max_acc_a) + '\n' +
                    "макс ускорение оси наклона:   " + to_string(max_acc_e) + '\n' +
                    "макс скорость оси поворота:   " + to_string(max_vel_a) + '\n' +
-                   "макс скорость оси наклона:    " + to_string(max_vel_e) + '\n';*/
+                   "макс скорость оси наклона:    " + to_string(max_vel_e) + '\n';
 }
 
 void Reader::Reset() {
@@ -149,8 +149,8 @@ void Reader::Reset() {
   uint16_t n_packet = *(uint16_t*)(reply_ + 2);
   //log_command_.push_back(to_string(n_packet));
 
-  /*print_message_ = "код ответа:                   " + to_string(code) + '\n' +
-                   "номер пакета:                 " + to_string(n_packet) + '\n';*/
+  print_message_ = "код ответа:                   " + to_string(code) + '\n' +
+                   "номер пакета:                 " + to_string(n_packet) + '\n';
 }
 
 void Reader::ParseError(uint16_t code) const {

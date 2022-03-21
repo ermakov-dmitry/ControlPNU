@@ -18,8 +18,8 @@ UDPConnecter::~UDPConnecter() {
   close(socket_.sockfd);
 }
 
-void UDPConnecter::SendMessage(char* data) {
-  sendto(socket_.sockfd, data, sizeof(data), 0,
+void UDPConnecter::SendMessage(char* data, size_t len) {
+  sendto(socket_.sockfd, data, len, 0,
          (sockaddr *) &socket_.servaddr,sizeof(socket_.servaddr));
   packet_number_++;
 }

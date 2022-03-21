@@ -18,10 +18,7 @@ void PNU::GetState() {
   Command message;
   message.command = 0x0100;
   message.n_packet = connecter_.GetPacketNumber();
-  char* send_data = new char[sizeof(message)];
-  memcpy(send_data, &message, sizeof(message));
-  connecter_.SendMessage(send_data);
-  delete[] send_data;
+  connecter_.SendMessage((char*)&message, 4);
 }
 
 void PNU::GoToPoint(double azimuth, double elevator) {
@@ -30,10 +27,7 @@ void PNU::GoToPoint(double azimuth, double elevator) {
   message.azimuth = Transform::DegToMkrad<unsigned short>(azimuth);
   message.elevator = Transform::DegToMkrad<unsigned short>(elevator);
   message.n_packet = connecter_.GetPacketNumber();
-  char* send_data = new char[sizeof(message)];
-  memcpy(send_data, &message, sizeof(message));
-  connecter_.SendMessage(send_data);
-  delete[] send_data;
+  connecter_.SendMessage((char*)&message, 8);
 }
 
 void PNU::SetMaxAccelerationAndSpeed(double max_acc_azimuth,
@@ -50,21 +44,15 @@ void PNU::SetMaxAccelerationAndSpeed(double max_acc_azimuth,
   message.max_velocity_elevator = Transform::DegToMkrad<unsigned short>(
           max_spd_elevator);
   message.n_packet = connecter_.GetPacketNumber();
-  char* send_data = new char[sizeof(message)];
-  memcpy(send_data, &message, sizeof(message));
-  connecter_.SendMessage(send_data);
-  delete[] send_data;
+  connecter_.SendMessage((char*)&message, 12);
 }
 
 void PNU::Reset() {
   Command message;
   message.command = 0x01F0;
   message.n_packet = connecter_.GetPacketNumber();
-  char* send_data = new char[sizeof(message)];
-  memcpy(send_data, &message, sizeof(message));
-  connecter_.SendMessage(send_data);
+  connecter_.SendMessage((char*)&message, 4);
   connecter_.ResetPackageNumber();
-  delete[] send_data;
 }
 
 void PNU::ReadReply() {
@@ -82,7 +70,7 @@ void PNU::ChangeIPAddress(const char* ip) {
   message.n_packet = connecter_.GetPacketNumber();
   char* send_data = new char[sizeof(message)];
   memcpy(send_data, &message, sizeof(message));
-  connecter_.SendMessage(send_data);
+  connecter_.SendMessage(send_data, 12);
   delete[] send_data;
   connecter_.ChangeIP(std::string(ip));
   // may be reset and ping from terminal for test
@@ -90,18 +78,18 @@ void PNU::ChangeIPAddress(const char* ip) {
 
 void CreatePNU() {
   if (pPNU == NULL)
-    pPNU = new PNU("192.168.6.2", 10000, false);
+    pPNU = new PNU("192.168.6.2", 10000, true);
 }
 
 void InitPNU() {
   if (pPNU) {
-    pPNU->ChangeIPAddress("192.168.59.218");
+    //pPNU->ChangeIPAddress("192.168.59.218");
     pPNU->Reset();
     pPNU->ReadReply();
     pPNU->GetState();
     pPNU->GetState();
     pPNU->ReadReply();
-    Transform::Cartesian cartesian_xyz = { 0, 0, 0 }; // xyz coord
+    Transform::Cartesian cartesian_xyz = { 1, 0, 1 }; // xyz coord
     Transform::Spherical pnu_angles = Transform::CartesianToPNU(cartesian_xyz);
     pPNU->GoToPoint(pnu_angles.phi, pnu_angles.theta);
   }
@@ -109,7 +97,7 @@ void InitPNU() {
 
 void CalculatePNU() {
   if (pPNU) {
-    Transform::Cartesian cartesian_xyz = { 0, 0, 0 }; // xyz coord
+    Transform::Cartesian cartesian_xyz = { 1, 1, 1 }; // xyz coord
     Transform::Spherical pnu_angles = Transform::CartesianToPNU(cartesian_xyz);
     pPNU->GoToPoint(pnu_angles.phi, pnu_angles.theta);
   }

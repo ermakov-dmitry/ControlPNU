@@ -23,7 +23,7 @@ class PNU;
 class UDPConnecter {
 public:
     explicit UDPConnecter(const std::string& ip_address, int port, char* data);
-    void SendMessage(char*);
+    void SendMessage(char*, size_t);
     void ReadMessage() const;
     unsigned short GetPacketNumber() const;
     void ResetPackageNumber();
