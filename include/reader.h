@@ -20,6 +20,7 @@ private:
     void Reset();
     void ParseError(unsigned short code) const;
     void ParseUnitState(unsigned short unit_state) const;
+    void ChangeIP();
     char* reply_;
     bool print_replies;
     std::string print_message_;

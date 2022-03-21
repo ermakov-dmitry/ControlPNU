@@ -23,6 +23,10 @@ void Reader::UnpackReply() {
       Reset();
       break;
 
+    case 0x8F00:
+      ChangeIP();
+      break;
+
     default:
       throw std::invalid_argument("Unknown code\n");
   }
@@ -149,6 +153,13 @@ void Reader::Reset() {
   uint16_t n_packet = *(uint16_t*)(reply_ + 2);
   //log_command_.push_back(to_string(n_packet));
 
+  print_message_ = "код ответа:                   " + to_string(code) + '\n' +
+                   "номер пакета:                 " + to_string(n_packet) + '\n';
+}
+
+void Reader::ChangeIP() {
+  uint16_t code = *(uint16_t*)reply_;
+  uint16_t n_packet = *(uint16_t*)(reply_ + 2);
   print_message_ = "код ответа:                   " + to_string(code) + '\n' +
                    "номер пакета:                 " + to_string(n_packet) + '\n';
 }

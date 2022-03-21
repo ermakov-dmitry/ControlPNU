@@ -68,22 +68,25 @@ void PNU::ChangeIPAddress(const char* ip) {
     message.copy_ip_adr[i] = message.ip_adr[i];
   }
   message.n_packet = connecter_.GetPacketNumber();
-  char* send_data = new char[sizeof(message)];
-  memcpy(send_data, &message, sizeof(message));
-  connecter_.SendMessage(send_data, 12);
-  delete[] send_data;
+  connecter_.SendMessage((char*)&message, 12);
+  ReadReply();
   connecter_.ChangeIP(std::string(ip));
   // may be reset and ping from terminal for test
 }
 
 void CreatePNU() {
   if (pPNU == NULL)
-    pPNU = new PNU("192.168.6.2", 10000, true);
+    pPNU = new PNU("192.168.6.6", 10000, true);
 }
 
 void InitPNU() {
   if (pPNU) {
-    //pPNU->ChangeIPAddress("192.168.59.218");
+    /*pPNU->Reset();
+    pPNU->ReadReply();
+    pPNU->GetState();
+    pPNU->GetState();
+    pPNU->ReadReply();
+    pPNU->ChangeIPAddress("192.168.6.6");*/
     pPNU->Reset();
     pPNU->ReadReply();
     pPNU->GetState();
