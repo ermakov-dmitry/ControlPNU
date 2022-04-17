@@ -10,15 +10,15 @@
 
 namespace Transform {
     struct Cartesian {
-        double x;
-        double y;
-        double z;
+      double x;
+      double y;
+      double z;
     };
 
     struct Spherical {
-        double range;
-        double theta;
-        double phi;
+      double range;
+      double theta;
+      double phi;
     };
 
     template<typename T>
@@ -42,7 +42,8 @@ namespace Transform {
     }
 
     Spherical CartesianToPNU (const Cartesian&);
-
+    Spherical ReduceAngles(const Spherical&);
+    Spherical ReducePositiveAngles(const Spherical&);
 }
 
 
