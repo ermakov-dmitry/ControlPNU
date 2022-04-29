@@ -20,8 +20,8 @@ PNU::PNU(const std::string& ip_address, int port) :
     setup_.elevator_offset = elevator_offset_;
     setup_.min_elevator = -45;
     setup_.max_elevator = 45;
-    setup_.lb_azimuth = 80;
-    setup_.rb_azimuth = -80;
+    setup_.min_azimuth = 80;
+    setup_.max_azimuth = -80;
 }
 
 PNU::~PNU() {
@@ -103,10 +103,10 @@ void PNU::SetOffsetsAndBounds(Offsets offsets, const Bounds &bounds) {
     message.n_packet = connecter_.GetPacketNumber();
     message.offset_azimuth = 0;
     message.offset_elevator = 0;
-    message.min_elevator = Transform::DegToMkrad<unsigned short>(bounds.min_elevator);
-    message.max_elevator = Transform::DegToMkrad<unsigned short>(bounds.max_elevator);
-    setup_.lb_azimuth = bounds.min_azimuth;
-    setup_.rb_azimuth = bounds.max_azimuth;
+    message.min_elevator = Transform::DegToMkrad<unsigned short>(bounds.min_elevator + 180);
+    message.max_elevator = Transform::DegToMkrad<unsigned short>(bounds.max_elevator + 180);
+    setup_.min_azimuth = bounds.min_azimuth;
+    setup_.max_azimuth = bounds.max_azimuth;
     connecter_.SendData((char*) &message, 12);
 }
 
@@ -229,8 +229,8 @@ void CalculatePNU()
                     offsets.azimuth = setup_.azimuth_offset;
                     offsets.elevator = setup_.elevator_offset;
                     Bounds bounds;
-                    bounds.min_azimuth = setup_.lb_azimuth;
-                    bounds.max_azimuth = setup_.rb_azimuth;
+                    bounds.min_azimuth = setup_.min_azimuth;
+                    bounds.max_azimuth = setup_.max_azimuth;
                     bounds.min_elevator = setup_.min_elevator;
                     bounds.max_elevator = setup_.max_elevator;
                     pPNU->SetOffsetsAndBounds(offsets, bounds);

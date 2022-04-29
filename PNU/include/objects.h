@@ -60,8 +60,8 @@ public:
         double elevator_offset;
         double min_elevator;
         double max_elevator;
-        double lb_azimuth;
-        double rb_azimuth;
+        double min_azimuth;
+        double max_azimuth;
     };
     struct Output{
         double azimuth;
