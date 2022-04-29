@@ -1,6 +1,5 @@
 #include "transformer.h"
 
-
 namespace Transform {
     Spherical CartesianToPNU (const Cartesian& cartesian) {
         Spherical ret;
