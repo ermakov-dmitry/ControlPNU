@@ -18,13 +18,13 @@ UDPConnecter::~UDPConnecter() {
   close(socket_.sockfd);
 }
 
-void UDPConnecter::SendMessage(char* data, size_t len) {
+void UDPConnecter::SendData(char* data, size_t len) {
   sendto(socket_.sockfd, data, len, 0,
          (sockaddr *) &socket_.servaddr,sizeof(socket_.servaddr));
   packet_number_++;
 }
 
-void UDPConnecter::ReadMessage() const {
+void UDPConnecter::ReadData() const {
   bool is_wait = true;
   ssize_t bytes_read;
   int flag = MSG_WAITALL;

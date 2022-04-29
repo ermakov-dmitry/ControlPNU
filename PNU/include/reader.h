@@ -8,23 +8,24 @@
 #include "commands.h"
 #include "transformer.h"
 
+struct Position {
+    double azimuth;
+    double elevator;
+};
+
 class Reader{
 public:
-    explicit Reader(bool is_print, char* data);
-    void UnpackReply();
-
+    explicit Reader(char* data);
+    Position UnpackReply() const;
 private:
-    void ReadState();
-    void GoToPoint();
-    void MaxAccAndSpeed();
-    void Reset();
+    Position ReadState() const;
+    Position GoToPoint() const;
+    void MaxAccAndSpeed() const;
+    void Reset() const;
     void ParseError(unsigned short code) const;
     void ParseUnitState(unsigned short unit_state) const;
-    void ChangeIP();
+    void ChangeIP() const;
     char* reply_;
-    bool print_replies;
-    std::string print_message_;
-    std::vector<std::string> log_command_;  // TODO create answer commands
 };
 
 #endif //DIPLOMA_READER_H

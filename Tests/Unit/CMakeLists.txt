@@ -15,4 +15,7 @@ add_executable(${PROJECT_NAME}-test
 
         angles_test.cpp)
 
+if(MINGW)
+    target_link_libraries(${PROJECT_NAME}-test ws2_32)
+endif()
 target_link_libraries(${PROJECT_NAME}-test gtest_main)

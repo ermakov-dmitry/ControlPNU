@@ -12,3 +12,7 @@ add_executable(${PROJECT_NAME}
         src/transformer.cpp
 
         main.cpp)
+
+if(MINGW)
+    target_link_libraries(${PROJECT_NAME} ws2_32)
+endif()

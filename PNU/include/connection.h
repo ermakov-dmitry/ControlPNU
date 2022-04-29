@@ -7,9 +7,15 @@
 #include <memory>
 #ifdef LOCAL_MACHINE
 #include <cstdint>
+#ifdef __linux__  // TODO test for Linux
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#elif __MINGW32__
+#include<cstdio>
+#include<winsock2.h>
+#define MSG_DONTWAIT 0
+#endif
 #else
 #include "sockLib.h"
 #include "inetLib.h"
@@ -23,8 +29,8 @@ class PNU;
 class UDPConnecter {
 public:
     explicit UDPConnecter(const std::string& ip_address, int port, char* data);
-    void SendMessage(char*, size_t);
-    void ReadMessage() const;
+    void SendData(char*, size_t);
+    void ReadData() const;
     unsigned short GetPacketNumber() const;
     void ResetPackageNumber();
     ~UDPConnecter();
