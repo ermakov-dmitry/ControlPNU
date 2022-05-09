@@ -1,3 +1,2 @@
-cmake-build-debug
-.gitmodules
-.idea
+cmake-build-debug/
+.idea/
