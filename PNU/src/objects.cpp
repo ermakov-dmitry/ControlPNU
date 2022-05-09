@@ -56,7 +56,7 @@ void PNU::GoToPoint(double azimuth, double elevator) {
     connecter_.SendData((char*) &message, 8);
 }
 
-void PNU::SetMaxAccelerationAndSpeed(const MaxSpeedData& values) {
+void PNU::SetMaxAccelerationAndSpeed(const PNU::MaxSpeedData& values) {
     SetMaxAccAndSpeed message;
     message.command = 0x0140;
     message.max_accel_azimuth     = Transform::DegToMkrad<unsigned short>(values.azimuth_acceleration);
@@ -94,7 +94,7 @@ void PNU::ChangeIPAddress(const char* ip) {
     connecter_.ChangeIP(std::string(ip));
 }
 
-void PNU::SetOffsetsAndBounds(Offsets offsets, const Bounds &bounds) {
+void PNU::SetOffsetsAndBounds(PNU::Offsets offsets, const PNU::Bounds &bounds) {
     azimuth_offset_ = offsets.azimuth;
     elevator_offset_ = offsets.elevator;
     // TODO: test with offset vars and command
@@ -170,10 +170,10 @@ void InitPNU() {
         pPNU->GetState();
         pPNU->GetState();
         pPNU->ReadReply();
-        Offsets offsets;
+        PNU::Offsets offsets;
         offsets.azimuth = 0;
         offsets.elevator = 0;
-        Bounds bounds;
+        PNU::Bounds bounds;
         bounds.min_azimuth = -80;
         bounds.max_azimuth = 80;
         bounds.min_elevator = -45;
@@ -218,17 +218,17 @@ void CalculatePNU()
                 }
             } else {
                 if (pPNU->setup_.cartesizan_mode) {
-                    Transform::Cartesian cartesian_xyz = { pPNU->setup_.x, pPNU->setup_.y, pPNU->setup_.z }; // xyz coord
+                    Transform::Cartesian cartesian_xyz = {pPNU->setup_.x, pPNU->setup_.y, pPNU->setup_.z};
                     Transform::Spherical pnu_angles = Transform::CartesianToPNU(cartesian_xyz);
                     pPNU->GoToPoint(pnu_angles.phi, pnu_angles.theta);
                 } else {
                     pPNU->GoToPoint(pPNU->setup_.azimuth,  pPNU->setup_.elevator);
                 }
                 if (pPNU->setup_.ust) {
-                    Offsets offsets;
+                    PNU::Offsets offsets;
                     offsets.azimuth = setup_.azimuth_offset;
                     offsets.elevator = setup_.elevator_offset;
-                    Bounds bounds;
+                    PNU::Bounds bounds;
                     bounds.min_azimuth = setup_.min_azimuth;
                     bounds.max_azimuth = setup_.max_azimuth;
                     bounds.min_elevator = setup_.min_elevator;

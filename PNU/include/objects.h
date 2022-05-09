@@ -12,41 +12,52 @@
 #include "ModelEnable.h"
 #endif
 
-struct Offsets {
-    double azimuth;
-    double elevator;
-};
-
-struct Bounds {
-    double min_azimuth;
-    double max_azimuth;
-    double min_elevator;
-    double max_elevator;
-};
-
-struct MaxSpeedData {
-    double azimuth_acceleration;
-    double elevator_acceleration;
-    double azimuth_velocity;
-    double elevator_velocity;
-};
-
+//! Основной класс с командами управления ПНУ
 class PNU {
 public:
+    //! Вспомогательная структура с полями смещения
+    struct Offsets {
+        double azimuth;
+        double elevator;
+    };
+    //! Вспомогательная структура с ограничениями по азимуту и углу места
+    struct Bounds {
+        double min_azimuth;
+        double max_azimuth;
+        double min_elevator;
+        double max_elevator;
+    };
+    //! Вспомогательная структура с ограничениями скоростных характеристик
+    struct MaxSpeedData {
+        double azimuth_acceleration;
+        double elevator_acceleration;
+        double azimuth_velocity;
+        double elevator_velocity;
+    };
+    //! Конструктор класса
     explicit PNU(const std::string& ip_address, int port);  // may be other for new objects
+    //! Команда "Прочитать состояние"
     void GetState();
+    //! Команда "Двигаться в точку"
     void GoToPoint(double azimuth, double elevator);
+    //! Команда "Задать максимальные ускорения и скорости"
     void SetMaxAccelerationAndSpeed(const MaxSpeedData&);
+    //! Команда "Сброс"
     void Reset();
+    //! Команда "Прочитать состояние"
     void ReadReply();
+    //! Команда "Сменить IP Адрес"
     void ChangeIPAddress(const char* ip);
-
 #ifndef LOCAL_MACHINE
     void npsk_ssk(double &x, double &y, double &z);
 #endif
+    //! Команда "Задать смещения и ограничения углов поворота"
     void SetOffsetsAndBounds(Offsets offsets, const Bounds& bounds);
+    //! Команда запроса угловых координат ПНУ TODO
     void GetOutput();
+    //! Деструктор класса
     ~PNU();
+    //! Структура для управления ПНУ через GUI
     struct Setup {
         int manual_mode;
         int ust;
@@ -63,20 +74,29 @@ public:
         double min_azimuth;
         double max_azimuth;
     };
+    Setup setup_;
+    //! Структура для отображения угловых координат в GUI
     struct Output{
         double azimuth;
         double elevator;
     };
-    Setup setup_;
     Output output_;
+    //! Флаг для проверки инициализации объекта
     bool is_init_;
+
 private:
+    //! Буфер с данными межсетевого обмена
     char* reply_pnu_;
+    //! Вспомогательный метод для чтения полученных данных от ПНУ
     void CheckReply();
+    //! Поле для сетевого обмена по UDP протоколу
     UDPConnecter connecter_;
+    //! Поле для разбора входящих данных
     Reader reader_;
+    //! Смещения углов ПНУ
     double azimuth_offset_;
     double elevator_offset_;
+    //! Текущие значения углов ПНУ
     double azimuth_;
     double elevator_;
 };

@@ -3,6 +3,7 @@
 #pragma once
 #pragma pack(push, 1)
 
+//! См. manual.pdf, пункт 3.3
 struct Command {  // read data, start/stop sequence
     unsigned short command;
     unsigned short n_packet;

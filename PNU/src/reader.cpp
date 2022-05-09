@@ -32,6 +32,9 @@ Position Reader::UnpackReply() const {
         default:
             throw std::invalid_argument("Unknown code\n");
     }
+#ifdef LOCAL_MACHINE
+    std::cout << print_message_ << '\n';
+#endif
     return ret;
 }
 
@@ -53,6 +56,19 @@ Position Reader::ReadState() const {
     Position ret;
     ret.azimuth = coordinate_a;
     ret.elevator = coordinate_e;
+    print_message_ = "код ответа:                   " + to_string(code) + '\n' +
+                     "номер пакета:                 " + to_string(n_packet) + '\n' +
+                     "код ошибки:                   " + to_string(error_code) + '\n' +
+                     "количество точек в буфере:    " + to_string(count_point_in_buffer) + '\n' +
+                     "состояние узла поворота:      " + to_string(move_unit_state) + '\n' +
+                     "копия состояния оси азимута:  " + to_string(stat_error_a) + '\n' +
+                     "координата оси поворота:      " + to_string(coordinate_a) + '\n' +
+                     "скорость оси поворота:        " + to_string(speed_a) + '\n' +
+                     "состояния оси наклона:        " + to_string(stat_error_e) + '\n' +
+                     "координата оси наклона:       " + to_string(coordinate_e) + '\n' +
+                     "скорость оси наклона:         " + to_string(speed_e) + '\n' +
+                     "напряжение питания сервок-в:  " + to_string(vcc_pwr_ae) + '\n';
+
     return ret;
 }
 
@@ -64,56 +80,41 @@ Position Reader::GoToPoint() const {
     Position ret;
     ret.azimuth = coordinate_a;
     ret.elevator = coordinate_e;
+  print_message_ = "код ответа:                   " + to_string(code) + '\n' +
+                   "номер пакета:                 " + to_string(n_packet) + '\n' +
+                   "координата оси поворота:      " + to_string(coordinate_a) + '\n' +
+                   "координата оси наклона:       " + to_string(coordinate_e) + '\n';
     return ret;
 
 }
 
 void Reader::MaxAccAndSpeed() const {
-    //log_command_.reserve(6);
-
     uint16_t code = *(uint16_t*)reply_;
-    //log_command_.push_back(to_string(code));
-
     uint16_t n_packet = *(uint16_t*)(reply_ + 2);
-    //log_command_.push_back(to_string(n_packet));
-
-    long double max_acc_a = Transform::MkradToDeg(*(uint16_t*)(reply_ + 4));
-    //log_command_.push_back(to_string(max_acc_a));
-
-    long double max_acc_e = Transform::MkradToDeg(*(uint16_t*)(reply_ + 6));
-    //log_command_.push_back(to_string(max_acc_e));
-
-    long double max_vel_a = Transform::MkradToDeg(*(uint16_t*)(reply_ + 8));
-    //log_command_.push_back(to_string(max_vel_a));
-
-    long double max_vel_e = Transform::MkradToDeg(*(uint16_t*)(reply_ + 10));
-    //log_command_.push_back(to_string(max_vel_e));
-
-/*  print_message_ = "код ответа:                   " + to_string(code) + '\n' +
-                   "номер пакета:                 " + to_string(n_packet) + '\n' +
-                   "макс ускорение оси поворота:  " + to_string(max_acc_a) + '\n' +
-                   "макс ускорение оси наклона:   " + to_string(max_acc_e) + '\n' +
-                   "макс скорость оси поворота:   " + to_string(max_vel_a) + '\n' +
-                   "макс скорость оси наклона:    " + to_string(max_vel_e) + '\n';*/
+    double max_acc_a = Transform::MkradToDeg(*(uint16_t*)(reply_ + 4));
+    double max_acc_e = Transform::MkradToDeg(*(uint16_t*)(reply_ + 6));
+    double max_vel_a = Transform::MkradToDeg(*(uint16_t*)(reply_ + 8));
+    double max_vel_e = Transform::MkradToDeg(*(uint16_t*)(reply_ + 10));
+    print_message_ = "код ответа:                   " + to_string(code) + '\n' +
+                     "номер пакета:                 " + to_string(n_packet) + '\n' +
+                     "макс ускорение оси поворота:  " + to_string(max_acc_a) + '\n' +
+                     "макс ускорение оси наклона:   " + to_string(max_acc_e) + '\n' +
+                     "макс скорость оси поворота:   " + to_string(max_vel_a) + '\n' +
+                     "макс скорость оси наклона:    " + to_string(max_vel_e) + '\n';
 }
 
 void Reader::Reset() const {
-
     uint16_t code = *(uint16_t*)reply_;
-    //log_command_.push_back(to_string(code));
-
     uint16_t n_packet = *(uint16_t*)(reply_ + 2);
-    //log_command_.push_back(to_string(n_packet));
-
-/*  print_message_ = "код ответа:                   " + to_string(code) + '\n' +
-                   "номер пакета:                 " + to_string(n_packet) + '\n';*/
+    print_message_ = "код ответа:                   " + to_string(code) + '\n' +
+                   "номер пакета:                 " + to_string(n_packet) + '\n';
 }
 
 void Reader::ChangeIP() const {
     uint16_t code = *(uint16_t*)reply_;
     uint16_t n_packet = *(uint16_t*)(reply_ + 2);
-/*  print_message_ = "код ответа:                   " + to_string(code) + '\n' +
-                   "номер пакета:                 " + to_string(n_packet) + '\n';*/
+    print_message_ = "код ответа:                   " + to_string(code) + '\n' +
+                   "номер пакета:                 " + to_string(n_packet) + '\n';
 }
 
 void Reader::ParseError(uint16_t code) const {
@@ -156,9 +157,13 @@ void Reader::ParseError(uint16_t code) const {
     if (code & (1 << 10)) {
         critical_errors += "Сервоконтролер оси наклона не работает\n";
     }
-    //logger_.LogStateErrors(errors);
+#ifdef LOCAL_MACHINE
+    if (!errors.empty()) {
+        std::cout << errors << '\n';
+    }
     if (!critical_errors.empty()) {
-        //logger_.LogStateCriticalErrors(critical_errors);
+        std::cout << critical_errors << '\n';
         throw runtime_error(critical_errors);  // this is gabella
     }
+#endif
 }

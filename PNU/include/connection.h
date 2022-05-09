@@ -24,28 +24,37 @@
 #include <cstdlib>
 #include <unistd.h>
 
-class PNU;
-
+//! Класс для сетевого обмена по UDP протоколу между ПНУ и внешним устройством
 class UDPConnecter {
 public:
+    //! Констуктор класса UDP соединения
     explicit UDPConnecter(const std::string& ip_address, int port, char* data);
+    //! Отправка данных на устройство
     void SendData(char*, size_t);
+    //! Получение данных от устройсва
     void ReadData() const;
+    //! Чтение номера пакета
     unsigned short GetPacketNumber() const;
+    //! Сброс номера пакета
     void ResetPackageNumber();
+    //! Деструктор класса
     ~UDPConnecter();
-    friend PNU;
+    //! Метод смены IP адреса
+    void ChangeIP(const std::string& ip_address);
+
 private:
+    //! Номер порта
     int port_;
+    //! IP адрес устройства
     std::string ip_address_;
+    //! Номер пакета
     unsigned short packet_number_;
     struct Socket {
         int sockfd;
         struct sockaddr_in servaddr;
     };
-    void ChangeIP(const std::string& ip_address);
+    //! Буфер с данными полученного сообщения
     char* reply_;
     Socket socket_;
 };
-
 #endif //DIPLOMA_CONNECTION_H
