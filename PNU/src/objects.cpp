@@ -29,8 +29,7 @@ PNU::~PNU() {
 }
 
 void PNU::CheckReply() {
-    Position pos;
-    pos = reader_.UnpackReply();
+    Position pos = reader_.UnpackReply();
     if (pos.azimuth != -1 && pos.elevator != -1) {
         azimuth_ = pos.azimuth;
         elevator_ = pos.elevator - 180;
@@ -45,8 +44,21 @@ void PNU::GetState() {
 }
 
 void PNU::GoToPoint(double azimuth, double elevator) {
-    // TODO: Add offsets
     Transform::Spherical pos = {1, elevator + elevator_offset_ + 180, azimuth + azimuth_offset_};
+    pos = Transform::ReducePositiveAngles(pos);
+    // Checking bounds
+    if (pos.phi < setup_.min_azimuth) {
+        pos.phi = setup_.min_azimuth;
+    }
+    if (pos.theta < setup_.min_elevator) {
+        pos.theta = setup_.min_elevator;
+    }
+    if (pos.phi > setup_.max_azimuth) {
+        pos.phi = setup_.max_azimuth;
+    }
+    if (pos.theta > setup_.max_elevator) {
+        pos.theta = setup_.max_elevator;
+    }
     pos = Transform::ReduceAngles(pos);
     MoveToPoint message;
     message.command = 0x0101;
@@ -97,17 +109,19 @@ void PNU::ChangeIPAddress(const char* ip) {
 void PNU::SetOffsetsAndBounds(PNU::Offsets offsets, const PNU::Bounds &bounds) {
     azimuth_offset_ = offsets.azimuth;
     elevator_offset_ = offsets.elevator;
+    setup_.min_azimuth = bounds.min_azimuth;
+    setup_.max_azimuth = bounds.max_azimuth;
+    setup_.min_elevator = bounds.min_elevator;
+    setup_.max_elevator = bounds.max_elevator;
     // TODO: test with offset vars and command
-    SetOffsetAndBoundsRotateAngles message;
+    /*SetOffsetAndBoundsRotateAngles message;
     message.command = 0x0120;
     message.n_packet = connecter_.GetPacketNumber();
     message.offset_azimuth = 0;
     message.offset_elevator = 0;
-    message.min_elevator = Transform::DegToMkrad<unsigned short>(bounds.min_elevator + 180);
-    message.max_elevator = Transform::DegToMkrad<unsigned short>(bounds.max_elevator + 180);
-    setup_.min_azimuth = bounds.min_azimuth;
-    setup_.max_azimuth = bounds.max_azimuth;
-    connecter_.SendData((char*) &message, 12);
+    message.min_elevator = Transform::DegToMkrad<unsigned short>(90);
+    message.max_elevator = Transform::DegToMkrad<unsigned short>(270);
+    connecter_.SendData((char*) &message, 12);*/
 }
 
 void PNU::GetOutput() {
