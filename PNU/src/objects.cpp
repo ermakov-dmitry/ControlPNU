@@ -20,8 +20,8 @@ PNU::PNU(const std::string& ip_address, int port) :
     setup_.elevator_offset = elevator_offset_;
     setup_.min_elevator = -45;
     setup_.max_elevator = 45;
-    setup_.min_azimuth = 80;
-    setup_.max_azimuth = -80;
+    setup_.min_azimuth = -80;
+    setup_.max_azimuth = 80;
 }
 
 PNU::~PNU() {
