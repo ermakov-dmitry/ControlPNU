@@ -16,21 +16,17 @@ Position Reader::UnpackReply() const {
         case 0x8101:
             ret = GoToPoint();
             break;
-
         case 0x8140:
             MaxAccAndSpeed();
             break;
-
         case 0x81F0:
             Reset();
             break;
-
         case 0x8F00:
             ChangeIP();
             break;
-
         default:
-            throw std::invalid_argument("Unknown code\n");
+            break;
     }
 #ifdef LOCAL_MACHINE
     std::cout << print_message_ << '\n';
@@ -56,6 +52,7 @@ Position Reader::ReadState() const {
     Position ret;
     ret.azimuth = coordinate_a;
     ret.elevator = coordinate_e;
+#ifdef LOCAL_MACHINE
     print_message_ = "код ответа:                   " + to_string(code) + '\n' +
                      "номер пакета:                 " + to_string(n_packet) + '\n' +
                      "код ошибки:                   " + to_string(error_code) + '\n' +
@@ -68,7 +65,7 @@ Position Reader::ReadState() const {
                      "координата оси наклона:       " + to_string(coordinate_e) + '\n' +
                      "скорость оси наклона:         " + to_string(speed_e) + '\n' +
                      "напряжение питания сервок-в:  " + to_string(vcc_pwr_ae) + '\n';
-
+#endif
     return ret;
 }
 
@@ -80,10 +77,12 @@ Position Reader::GoToPoint() const {
     Position ret;
     ret.azimuth = coordinate_a;
     ret.elevator = coordinate_e;
-  print_message_ = "код ответа:                   " + to_string(code) + '\n' +
-                   "номер пакета:                 " + to_string(n_packet) + '\n' +
-                   "координата оси поворота:      " + to_string(coordinate_a) + '\n' +
-                   "координата оси наклона:       " + to_string(coordinate_e) + '\n';
+#ifdef LOCAL_MACHINE
+    print_message_ = "код ответа:                   " + to_string(code) + '\n' +
+                     "номер пакета:                 " + to_string(n_packet) + '\n' +
+                     "координата оси поворота:      " + to_string(coordinate_a) + '\n' +
+                     "координата оси наклона:       " + to_string(coordinate_e) + '\n';
+#endif
     return ret;
 
 }
@@ -95,26 +94,32 @@ void Reader::MaxAccAndSpeed() const {
     double max_acc_e = Transform::MkradToDeg(*(uint16_t*)(reply_ + 6));
     double max_vel_a = Transform::MkradToDeg(*(uint16_t*)(reply_ + 8));
     double max_vel_e = Transform::MkradToDeg(*(uint16_t*)(reply_ + 10));
+#ifdef LOCAL_MACHINE
     print_message_ = "код ответа:                   " + to_string(code) + '\n' +
                      "номер пакета:                 " + to_string(n_packet) + '\n' +
                      "макс ускорение оси поворота:  " + to_string(max_acc_a) + '\n' +
                      "макс ускорение оси наклона:   " + to_string(max_acc_e) + '\n' +
                      "макс скорость оси поворота:   " + to_string(max_vel_a) + '\n' +
                      "макс скорость оси наклона:    " + to_string(max_vel_e) + '\n';
+#endif
 }
 
 void Reader::Reset() const {
     uint16_t code = *(uint16_t*)reply_;
     uint16_t n_packet = *(uint16_t*)(reply_ + 2);
+#ifdef LOCAL_MACHINE
     print_message_ = "код ответа:                   " + to_string(code) + '\n' +
                    "номер пакета:                 " + to_string(n_packet) + '\n';
+#endif
 }
 
 void Reader::ChangeIP() const {
     uint16_t code = *(uint16_t*)reply_;
     uint16_t n_packet = *(uint16_t*)(reply_ + 2);
+#ifdef LOCAL_MACHINE
     print_message_ = "код ответа:                   " + to_string(code) + '\n' +
                    "номер пакета:                 " + to_string(n_packet) + '\n';
+#endif
 }
 
 void Reader::ParseError(uint16_t code) const {
@@ -163,7 +168,7 @@ void Reader::ParseError(uint16_t code) const {
     }
     if (!critical_errors.empty()) {
         std::cout << critical_errors << '\n';
-        throw runtime_error(critical_errors);  // this is gabella
+        exit(code);
     }
 #endif
 }

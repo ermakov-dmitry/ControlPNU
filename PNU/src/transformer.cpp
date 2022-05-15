@@ -4,10 +4,10 @@ namespace Transform {
     Spherical CartesianToPNU (const Cartesian& cartesian) {
         Spherical ret;
         ret.range = sqrt(pow(cartesian.x, 2.) + pow(cartesian.y, 2.) + pow(cartesian.z, 2.));
-        ret.theta = 270 - 180 * atan2(sqrt(pow(cartesian.z, 2.)
+        ret.theta = 90 - 180 * atan2(sqrt(pow(cartesian.z, 2.)
                                            + pow(cartesian.x, 2.)), cartesian.y) / PI;
 
-        ret.phi = 180 * atan2(cartesian.z, cartesian.x) / PI;
+        ret.phi = -180 * atan2(cartesian.z, cartesian.x) / PI;
         return ReduceAngles(ret);
     }
 

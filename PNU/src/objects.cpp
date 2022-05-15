@@ -44,7 +44,7 @@ void PNU::GetState() {
 }
 
 void PNU::GoToPoint(double azimuth, double elevator) {
-    Transform::Spherical pos = {1, elevator + elevator_offset_ + 180, azimuth + azimuth_offset_};
+    Transform::Spherical pos = {1, elevator + elevator_offset_, azimuth + azimuth_offset_};
     pos = Transform::ReducePositiveAngles(pos);
     // Checking bounds
     if (pos.phi < setup_.min_azimuth) {
@@ -59,6 +59,7 @@ void PNU::GoToPoint(double azimuth, double elevator) {
     if (pos.theta > setup_.max_elevator) {
         pos.theta = setup_.max_elevator;
     }
+    pos.theta += 180;
     pos = Transform::ReduceAngles(pos);
     MoveToPoint message;
     message.command = 0x0101;
